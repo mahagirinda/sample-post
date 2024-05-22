@@ -21,7 +21,7 @@ Route::get('/', function () {
 Route::prefix("post")->group(function () {
     Route::controller(PostController::class)->group(function () {
         Route::get('create', 'create')->name('post.create');
-        Route::post('create', 'create')->name('post.store');
+        Route::post('create', 'store')->name('post.store');
         Route::get('update', 'update')->name('post.update');
         Route::put('update', 'update')->name('post.store.update');
         Route::get('inquiry', 'inquiry')->name('post.inquiry');
