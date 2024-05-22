@@ -8,23 +8,35 @@ use Illuminate\View\View;
 class PostController extends Controller
 {
 
+    /*
+     * Ini method untuk menampilkan halaman create
+     */
     function create(): View
     {
         return view('post.create');
     }
 
+    /*
+     * Ini method untuk penyimpanan ke database
+     */
     function store(Request $request): View
     {
         // PostModel::fill($request)->save();
         return view('post.create');
     }
 
+    /*
+     * Ini method untuk menampilkan halaman updaet
+     */
     function update(): string
     {
-        // return view('post.update');
-        return redirect()->route('post.create');
+        return view('post.update');
+        // return redirect()->route('post.create');
     }
 
+    /*
+     * Ini method untuk menampilkan halaman inquiry
+     */
     function inquiry(): View
     {
         // $posts = PostModel::all();
@@ -47,6 +59,9 @@ class PostController extends Controller
         ]);
     }
 
+    /*
+     * Ini method untuk menampilkan halaman detail post
+     */
     function detail($id): string
     {
         return view('post.detail', compact('id'));
