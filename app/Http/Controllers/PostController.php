@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -13,6 +14,7 @@ class PostController extends Controller
      */
     function create(): View
     {
+        Log::info("User sudah mengakses halaman post create");
         return view('post.create');
     }
 
@@ -50,6 +52,11 @@ class PostController extends Controller
                 "id" => 2,
                 "title" => "Title 2",
                 "body" => "Body 2"
+            ],
+            (object)[
+                "id" => 3,
+                "title" => "Title 3",
+                "body" => "Body 3"
             ]
         ];
 
@@ -64,6 +71,7 @@ class PostController extends Controller
      */
     function detail($id): string
     {
+        Log::info("User sudah mengakses halaman detail post dengan id $id");
         return view('post.detail', compact('id'));
     }
 }

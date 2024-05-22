@@ -65,6 +65,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'log-error' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/laravel.error.log'),
+            'level' => 'error',
+            'days' => 7,
+            'replace_placeholders' => true,
+        ],
+
         'daily' => [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
