@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::prefix("post")->group(function () {
+    Route::controller(PostController::class)->group(function () {
+        Route::get('create', 'create')->name('post.create');
+        Route::post('create', 'create')->name('post.store');
+        Route::get('update', 'update')->name('post.update');
+        Route::put('update', 'update')->name('post.store.update');
+        Route::get('inquiry', 'inquiry')->name('post.inquiry');
+        Route::get('detail/{id}', 'detail')->name('post.detail')
+            ->where('id', '[0-9]+');
+    });
 });
