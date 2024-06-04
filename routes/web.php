@@ -21,10 +21,9 @@ Route::get('/', function () {
 Route::middleware("role:all")->group(function () {
     Route::prefix("post")->group(function () {
         Route::controller(PostController::class)->group(function () {
+            Route::get('home', 'home')->name('post.home');
             Route::get('create', 'create')->name('post.create');
             Route::post('create', 'store')->name('post.store');
-            Route::get('update', 'update')->name('post.update');
-            Route::put('update', 'update')->name('post.store.update');
         });
     });
 });
@@ -32,9 +31,11 @@ Route::middleware("role:all")->group(function () {
 Route::middleware("role:admin")->group(function () {
     Route::prefix("post")->group(function () {
         Route::controller(PostController::class)->group(function () {
+            Route::get('dashboard', 'dashboard')->name('dashboard');
             Route::get('inquiry', 'inquiry')->name('post.inquiry');
-            Route::get('detail/{id}', 'detail')->name('post.detail')
-                ->where('id', '[0-9]+');
+            Route::get('update/{id}', 'edit')->name('post.edit')
+                ->where('id', '[0-9]+');;
+            Route::put('update', 'update')->name('post.update');
         });
     });
 });
