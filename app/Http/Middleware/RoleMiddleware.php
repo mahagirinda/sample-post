@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
@@ -36,6 +37,7 @@ class RoleMiddleware
             return response('Hanya bisa diakses oleh admin!', 401);
         }
 
+        View::share('role', $user_role);
         return $next($request);
     }
 }

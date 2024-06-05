@@ -2,76 +2,86 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
+use App\Models\Post;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
+    function dashboard(): View
+    {
+        return view('layout.dashboard');
+    }
 
-    /*
-     * Ini method untuk menampilkan halaman create
-     */
+    function home(): View
+    {
+        $posts = Post::all()->sortByDesc('created_at');
+        return view('post.home')->with('posts', $posts);
+    }
+
     function create(): View
     {
-        Log::info("User sudah mengakses halaman post create");
         return view('post.create');
     }
 
-    /*
-     * Ini method untuk penyimpanan ke database
-     */
-    function store(Request $request): View
+    public function store(PostRequest $request): RedirectResponse
     {
-        // PostModel::fill($request)->save();
-        return view('post.create');
+        try {
+            $post = new Post();
+            $post->title = $request->title;
+            if ($request->hasFile('image')) {
+                $imageName = time() . '.' . request()->image->getClientOriginalExtension();
+                $request->file('image')->storeAs('image/post', $imageName, 'public');
+                $post->image = $imageName;
+            }
+            $post->category = $request->category;
+            $post->content = $request->post_content;
+            $post->save();
+        } catch (Exception $e) {
+            Log::channel('log-error')->error($e->getMessage());
+            return redirect()->route('post.create')->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('post.create')->with('success', 'Post saved successfully!');
     }
 
-    /*
-     * Ini method untuk menampilkan halaman updaet
-     */
-    function update(): string
+    function edit($id): View
     {
-        return view('post.update');
-        // return redirect()->route('post.create');
+        $post = Post::where('id', $id)->first();
+        return view('post.edit')->with('post', $post);
     }
 
-    /*
-     * Ini method untuk menampilkan halaman inquiry
-     */
+    public function update(PostRequest $request): RedirectResponse
+    {
+        $post = Post::where('id', $request->id)->first();
+        try {
+            $post->title = $request->title;
+            $post->category = $request->category;
+            $post->content = $request->post_content;
+            if ($request->hasFile('image')) {
+                if (Storage::disk('public')->exists('image/post/' . $post->image)) {
+                    Storage::disk('public')->delete('image/post/' . $post->image);
+                }
+                $imageName = time() . '.' . request()->image->getClientOriginalExtension();
+                $request->file('image')->storeAs('image/post', $imageName, 'public');
+                $post->image = $imageName;
+            }
+            $post->save();
+        } catch (Exception $e) {
+            Log::channel('log-error')->error($e->getMessage());
+            return redirect()->route('post.edit', ['id' => $post->id])->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('post.edit', ['id' => $post->id])->with('success', 'Post updated successfully!');
+    }
+
     function inquiry(): View
     {
-        // $posts = PostModel::all();
-        $posts = [
-            (object)[
-                "id" => 1,
-                "title" => "Title 1",
-                "body" => "Body 1"
-            ],
-            (object)[
-                "id" => 2,
-                "title" => "Title 2",
-                "body" => "Body 2"
-            ],
-            (object)[
-                "id" => 3,
-                "title" => "Title 3",
-                "body" => "Body 3"
-            ]
-        ];
-
-        // return view('post.inquiry', compact('posts'));
-        return view('post.inquiry', [
-            'posts' => $posts
-        ]);
-    }
-
-    /*
-     * Ini method untuk menampilkan halaman detail post
-     */
-    function detail($id): string
-    {
-        Log::info("User sudah mengakses halaman detail post dengan id $id");
-        return view('post.detail', compact('id'));
+        $posts = Post::all();
+        return view('post.inquiry', compact('posts'));
     }
 }

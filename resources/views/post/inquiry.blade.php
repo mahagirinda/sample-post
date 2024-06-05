@@ -1,25 +1,49 @@
-<div>
-    <p style="background-color: blanchedalmond">
-        Ini adalah halaman post inquiry.
-    </p>
-    <table style="background-color: #a0aec0; border: solid 1px #1a202c">
+@extends('layout.app')
+
+@section('title', 'Post Inquiry')
+
+@section('breadcrumb')
+    <div class="breadcrumb-wrapper">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('post.home') }}">Post</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    Inquiry
+                </li>
+            </ol>
+        </nav>
+    </div>
+@endsection
+
+@section('content')
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <table class="table table-striped table-borderless">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Content</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
         @foreach($posts as $post)
-            <tr style="border: solid 1px #1a202c">
-                <td style="border: solid 1px #1a202c">
-                    Title :
-                </td>
-                <td style="border: solid 1px #1a202c">
-                    {{ $post->title }}
-                </td>
-            </tr>
             <tr>
-                <td style="border: solid 1px #1a202c">
-                    Isi :
-                </td>
-                <td style="border: solid 1px #1a202c">
-                    {{ $post->body }}
+                <td>{{ $post->title }}</td>
+                <td>{{ $post->category }}</td>
+                <td>{{ $post->content }}</td>
+                <td>
+                    <a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary btn-sm">Edit</a>
                 </td>
             </tr>
         @endforeach
+        </tbody>
     </table>
-</div>
+@endsection
