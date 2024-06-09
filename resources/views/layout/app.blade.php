@@ -24,21 +24,21 @@
     </div>
     <nav class="sidebar-nav">
         <ul>
-            <li class="nav-item {{ Request::is('home') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::routeIs('home') ? 'active' : '' }}">
                 <a href="{{ route('home') }}" aria-expanded="false">
                     <span class="icon lni lni-home"></span>
                     <span class="text">Home</span>
                 </a>
             </li>
             @if($role === 'admin')
-                <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
+                <li class="nav-item {{ Request::routeIs('dashboard') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}" aria-expanded="false">
                         <span class="icon lni lni-pie-chart"></span>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
             @endif
-            <li class="nav-item {{ Request::is('post/create') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::routeIs('post.create') ? 'active' : '' }}">
                 <a href="{{ route('post.create') }}" aria-expanded="false">
                     <span class="icon lni lni-creative-commons"></span>
                     <span class="text">Create Post</span>
@@ -64,7 +64,12 @@
             <hr/>
             </span>
                 <li class="nav-item nav-item-has-children">
-                    <a href="#" class="collapsed"
+                    <a href="#" class="
+                            @if(request()->routeIs(['post.inquiry', 'post.edit.list', 'post.edit']))
+                               collapse
+                            @else
+                               collapsed
+                            @endif"
                        data-bs-toggle="collapse" data-bs-target="#post-menu"
                        aria-controls="post-menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="icon lni lni-paperclip"></span>
@@ -78,7 +83,7 @@
                             dropdown-nav">
                         <li>
                             <a href="{{ route('post.inquiry')  }}"
-                               class="{{ Request::is('post/inquiry') ? 'active' : '' }}"> Inquiry </a>
+                               class="{{ Request::routeIs('post.inquiry') ? 'active' : '' }}"> Inquiry </a>
                         </li>
                         <li>
                             <a href="{{ route('post.edit.list')  }}"
