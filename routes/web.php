@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('post.home');
+    return redirect()->route('home');
 });
 
 Route::middleware("role:all")->group(function () {
-    Route::get("home", [PostController::class, 'home'])->name('post.home');
+    Route::get("home", [PostController::class, 'home'])->name('home');
     Route::prefix("post")->group(function () {
         Route::controller(PostController::class)->group(function () {
             Route::get('create', 'create')->name('post.create');
@@ -29,11 +29,12 @@ Route::middleware("role:all")->group(function () {
 });
 
 Route::middleware("role:admin")->group(function () {
+    Route::get("dashboard", [PostController::class, 'dashboard'])->name('dashboard');
     Route::prefix("post")->group(function () {
         Route::controller(PostController::class)->group(function () {
-            Route::get('dashboard', 'dashboard')->name('dashboard');
             Route::get('inquiry', 'inquiry')->name('post.inquiry');
-            Route::get('update/{id}', 'edit')->name('post.edit')
+            Route::get('edit-list', 'edit_list')->name('post.edit.list');
+            Route::get('edit/{id}', 'edit')->name('post.edit')
                 ->where('id', '[0-9]+');;
             Route::put('update', 'update')->name('post.update');
         });

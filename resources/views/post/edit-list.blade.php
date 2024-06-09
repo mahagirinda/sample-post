@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Inquiry')
+@section('title', 'Edit')
 
 @section('breadcrumb')
     <div class="breadcrumb-wrapper">
@@ -10,7 +10,7 @@
                     <a href="{{ route('home') }}">Post</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Inquiry
+                    Edit
                 </li>
             </ol>
         </nav>
@@ -22,11 +22,9 @@
         <thead>
         <tr>
             <th scope="col" class="col-2">Title</th>
-            <th scope="col" class="col-1">Image</th>
             <th scope="col" class="col-1">Category</th>
-            <th scope="col" class="col-5">Content</th>
-            <th scope="col" class="col-2">Created At</th>
-            <th scope="col" class="col-1">Updated</th>
+            <th scope="col" class="col-8">Content</th>
+            <th scope="col" class="col-1 text-center">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -34,10 +32,6 @@
             <tr>
                 <td class="align-content-center">
                     {{ $post->title }}
-                </td>
-                <td class="align-content-center">
-                    <img src="{{ url('storage/image/post/' . $post->image) }}" class="inquiry-image-post"
-                         alt="{{ "content-image-".$post->id }}" loading="lazy">
                 </td>
                 <td class="align-content-center">
                     {{ $post->category }}
@@ -62,14 +56,7 @@
                     </div>
                 </td>
                 <td class="text-center align-content-center">
-                    <small>{{ $post->created_at }}</small>
-                </td>
-                <td class="text-center align-content-center">
-                    @if($post->created_at == $post->updated_at)
-                        <span class="text-success icon lni lni-checkmark-circle"></span>
-                    @else
-                        <span class="text-danger icon lni lni-circle-minus"></span>
-                    @endif
+                    <a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary btn-sm">Edit</a>
                 </td>
             </tr>
         @endforeach

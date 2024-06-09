@@ -14,13 +14,13 @@ class PostController extends Controller
 {
     function dashboard(): View
     {
-        return view('layout.dashboard');
+        return view('dashboard');
     }
 
     function home(): View
     {
         $posts = Post::all()->sortByDesc('created_at');
-        return view('post.home')->with('posts', $posts);
+        return view('home')->with('posts', $posts);
     }
 
     function create(): View
@@ -49,6 +49,12 @@ class PostController extends Controller
         }
 
         return redirect()->route('post.create')->with('success', 'Post saved successfully!');
+    }
+
+    function edit_list(): View
+    {
+        $posts = Post::all();
+        return view('post.edit-list', compact('posts'));
     }
 
     function edit($id): View

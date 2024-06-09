@@ -1,16 +1,19 @@
 @extends('layout.app')
 
-@section('title', 'Post Update')
+@section('title', 'Edit')
 
 @section('breadcrumb')
     <div class="breadcrumb-wrapper">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('post.home') }}">Post</a>
+                    <a href="{{ route('home') }}">Post</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('post.edit.list') }}">Edit</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Edit
+                    {{ $post->title }}
                 </li>
             </ol>
         </nav>
@@ -48,11 +51,23 @@
         </div>
 
         <div class="mb-3">
-            <label for="image" class="form-label">Image</label>
+            <label for="image" class="form-label">Image (Optional)</label>
             <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
             @error('image')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
+
+            <p class="d-inline-flex gap-1 pt-3">
+                <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseImage" aria-expanded="false" aria-controls="collapseImage">
+                    Show Current Post Image
+                </button>
+            </p>
+            <div class="collapse pt-2" id="collapseImage">
+                <div class="card card-body">
+                    <img src="{{ url('storage/image/post/' . $post->image) }}" alt="">
+                </div>
+            </div>
         </div>
 
         <div class="mb-3">

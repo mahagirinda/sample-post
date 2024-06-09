@@ -1,13 +1,13 @@
 @extends('layout.app')
 
-@section('title', 'Post Create')
+@section('title', 'Create')
 
 @section('breadcrumb')
     <div class="breadcrumb-wrapper">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('post.home') }}">Post</a>
+                    <a href="{{ route('home') }}">Post</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
                     Create

@@ -24,14 +24,14 @@
     </div>
     <nav class="sidebar-nav">
         <ul>
-            <li class="nav-item {{ Request::is('post/home') ? 'active' : '' }}">
-                <a href="{{ route('post.home') }}" aria-expanded="false">
+            <li class="nav-item {{ Request::is('home') ? 'active' : '' }}">
+                <a href="{{ route('home') }}" aria-expanded="false">
                     <span class="icon lni lni-home"></span>
                     <span class="text">Home</span>
                 </a>
             </li>
             @if($role === 'admin')
-                <li class="nav-item {{ Request::is('post/dashboard') ? 'active' : '' }}">
+                <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}" aria-expanded="false">
                         <span class="icon lni lni-pie-chart"></span>
                         <span class="text">Dashboard</span>
@@ -60,65 +60,73 @@
                 </a>
             </li>
             @if($role === 'admin')
-            <span class="divider">
+                <span class="divider">
             <hr/>
             </span>
-            <li class="nav-item nav-item-has-children">
-                <a href="#" class="{{ (Request::is('post/inquiry') || Request::is('post/update/*')) ? 'collapse' : 'collapsed' }}"
-                   data-bs-toggle="collapse" data-bs-target="#post-menu"
-                   aria-controls="post-menu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="icon lni lni-paperclip"></span>
-                    <span class="text">Post</span>
-                </a>
-                <ul id="post-menu"
-                    class="collapse {{ (Request::is('post/inquiry') || Request::is('post/update/*')) ? 'show' : '' }} dropdown-nav">
-                    <li>
-                        <a href="{{ route('post.inquiry')  }}" class="{{ Request::is('post/inquiry') ? 'active' : '' }}"> Inquiry </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('post.create') }}"> Create </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('post.inquiry')  }}" class="{{ Request::is('post/update/*') ? 'active' : '' }}"> Update </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item nav-item-has-children">
-                <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2"
-                   aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="icon lni lni-comments"></span>
-                    <span class="text">Comments</span>
-                </a>
-                <ul id="ddmenu_2" class="collapse dropdown-nav">
-                    <li>
-                        <a href="#"> Inquiry </a>
-                    </li>
-                    <li>
-                        <a href="#"> Create </a>
-                    </li>
-                    <li>
-                        <a href="#"> Update </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item nav-item-has-children">
-                <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_3"
-                   aria-controls="ddmenu_3" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="icon lni lni-comments"></span>
-                    <span class="text">Categories</span>
-                </a>
-                <ul id="ddmenu_3" class="collapse dropdown-nav">
-                    <li>
-                        <a href="#"> Inquiry </a>
-                    </li>
-                    <li>
-                        <a href="#"> Create </a>
-                    </li>
-                    <li>
-                        <a href="#"> Update </a>
-                    </li>
-                </ul>
-            </li>
+                <li class="nav-item nav-item-has-children">
+                    <a href="#" class="collapsed"
+                       data-bs-toggle="collapse" data-bs-target="#post-menu"
+                       aria-controls="post-menu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon lni lni-paperclip"></span>
+                        <span class="text">Post</span>
+                    </a>
+                    <ul id="post-menu"
+                        class="collapse
+                            @if(request()->routeIs(['post.inquiry', 'post.edit.list', 'post.edit']))
+                               show
+                            @endif
+                            dropdown-nav">
+                        <li>
+                            <a href="{{ route('post.inquiry')  }}"
+                               class="{{ Request::is('post/inquiry') ? 'active' : '' }}"> Inquiry </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('post.edit.list')  }}"
+                               class="
+                               @if(request()->routeIs(['post.edit.list', 'post.edit']))
+                                   active
+                               @endif">
+                                Update
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-has-children">
+                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2"
+                       aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon lni lni-comments"></span>
+                        <span class="text">Comments</span>
+                    </a>
+                    <ul id="ddmenu_2" class="collapse dropdown-nav">
+                        <li>
+                            <a href="#"> Inquiry </a>
+                        </li>
+                        <li>
+                            <a href="#"> Create </a>
+                        </li>
+                        <li>
+                            <a href="#"> Update </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-has-children">
+                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_3"
+                       aria-controls="ddmenu_3" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon lni lni-comments"></span>
+                        <span class="text">Categories</span>
+                    </a>
+                    <ul id="ddmenu_3" class="collapse dropdown-nav">
+                        <li>
+                            <a href="#"> Inquiry </a>
+                        </li>
+                        <li>
+                            <a href="#"> Create </a>
+                        </li>
+                        <li>
+                            <a href="#"> Update </a>
+                        </li>
+                    </ul>
+                </li>
             @endif
             <span class="divider">
                 <hr/>
