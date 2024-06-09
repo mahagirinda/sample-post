@@ -15,13 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('post.home');
 });
 
 Route::middleware("role:all")->group(function () {
+    Route::get("home", [PostController::class, 'home'])->name('post.home');
     Route::prefix("post")->group(function () {
         Route::controller(PostController::class)->group(function () {
-            Route::get('home', 'home')->name('post.home');
             Route::get('create', 'create')->name('post.create');
             Route::post('create', 'store')->name('post.store');
         });

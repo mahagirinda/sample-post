@@ -43,7 +43,9 @@ class PostController extends Controller
             $post->save();
         } catch (Exception $e) {
             Log::channel('log-error')->error($e->getMessage());
-            return redirect()->route('post.create')->with('error', $e->getMessage());
+            return redirect()
+                ->route('post.create')
+                ->with('error', "Error : " . $e->getMessage());
         }
 
         return redirect()->route('post.create')->with('success', 'Post saved successfully!');
@@ -73,10 +75,13 @@ class PostController extends Controller
             $post->save();
         } catch (Exception $e) {
             Log::channel('log-error')->error($e->getMessage());
-            return redirect()->route('post.edit', ['id' => $post->id])->with('error', $e->getMessage());
+            return redirect()
+                ->route('post.edit', ['id' => $post->id])
+                ->with('error', "Error : " . $e->getMessage());
         }
 
-        return redirect()->route('post.edit', ['id' => $post->id])->with('success', 'Post updated successfully!');
+        $parameter = ['id' => $post->id];
+        return redirect()->route('post.edit', $parameter)->with('success', 'Post updated successfully!');
     }
 
     function inquiry(): View
