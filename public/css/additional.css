@@ -1,0 +1,14 @@
+/*Additional CSS Section*/
+.inquiry-image-post {
+    max-height: 50px;
+    max-width: 50px;
+}
+
+.card {
+    height: auto;
+}
+
+.card-img-top {
+    object-fit: cover;
+    max-height: 250px;
+}

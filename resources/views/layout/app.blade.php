@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ url("css/bootstrap.min.css") }}"/>
     <link rel="stylesheet" href="{{ url("css/lineicons.css") }}" type="text/css"/>
     <link rel="stylesheet" href="{{ url("css/main.css") }}"/>
+    <link rel="stylesheet" href="{{ url("css/additional.css") }}"/>
 </head>
 
 <body>
@@ -24,7 +25,7 @@
     </div>
     <nav class="sidebar-nav">
         <ul>
-            <li class="nav-item {{ Request::routeIs('home') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::routeIs('home', 'post.view') ? 'active' : '' }}">
                 <a href="{{ route('home') }}" aria-expanded="false">
                     <span class="icon lni lni-home"></span>
                     <span class="text">Home</span>

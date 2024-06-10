@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed content
  *
  * Used Method
- * @method static where(string $string, $id)
+ * @method static where(string $property, $value)
+ * @method static orderBy(string $property, string $value)
  */
 class Post extends Model
 {

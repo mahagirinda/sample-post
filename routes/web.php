@@ -24,6 +24,7 @@ Route::middleware("role:all")->group(function () {
         Route::controller(PostController::class)->group(function () {
             Route::get('create', 'create')->name('post.create');
             Route::post('create', 'store')->name('post.store');
+            Route::get('view/{id}', 'view')->name('post.view');
         });
     });
 });

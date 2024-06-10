@@ -28,6 +28,12 @@ class PostController extends Controller
         return view('post.create');
     }
 
+    function view(String $id): View
+    {
+        $post = Post::where('id', $id)->firstOrFail();
+        return view('post.view', compact('post'));
+    }
+
     public function store(PostRequest $request): RedirectResponse
     {
         try {

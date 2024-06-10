@@ -5564,9 +5564,3 @@ h6,
     transform: rotate(360deg);
   }
 }
-
-/*Additional CSS Section*/
-.inquiry-image-post {
-    max-height: 50px;
-    max-width: 50px;
-}
