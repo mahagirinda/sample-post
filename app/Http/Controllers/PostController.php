@@ -19,8 +19,8 @@ class PostController extends Controller
 
     function home(): View
     {
-        $posts = Post::all()->sortByDesc('created_at');
-        return view('home')->with('posts', $posts);
+        $posts = Post::orderBy('created_at', 'desc')->paginate(6);
+        return view('home', compact('posts'));
     }
 
     function create(): View
