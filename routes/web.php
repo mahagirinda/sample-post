@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,16 @@ Route::middleware("role:all")->group(function () {
             Route::post('create', 'store')->name('post.store');
             Route::get('user', 'user')->name('post.user');
             Route::get('view/{id}', 'view')->name('post.view');
+        });
+    });
+
+    Route::prefix("comment")->group(function () {
+        Route::controller(CommentController::class)->group(function () {
+            Route::post('create', 'store')->name('comment.store');
+            Route::get('user', 'user')->name('comment.user');
+            Route::get('edit/{id}', 'edit')->name('comment.edit')
+                ->where('id', '[0-9]+');
+            Route::put('update', 'update')->name('comment.update');
         });
     });
 });

@@ -41,7 +41,7 @@
             @endif
             <li class="nav-item {{ Request::routeIs('post.create') ? 'active' : '' }}">
                 <a href="{{ route('post.create') }}" aria-expanded="false">
-                    <span class="icon lni lni-creative-commons"></span>
+                    <span class="icon lni lni-write"></span>
                     <span class="text">Create Post</span>
                 </a>
             </li>
@@ -54,8 +54,8 @@
                     <span class="text">My Post</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="#">
+            <li class="nav-item {{ Request::routeIs('comment.user', 'comment.edit') ? 'active' : '' }}">
+                <a href="{{ route('comment.user') }}">
                     <span class="icon lni lni-user"></span>
                     <span class="text">My Comments</span>
                 </a>
@@ -98,12 +98,12 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-has-children">
-                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2"
-                       aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="icon lni lni-comments"></span>
-                        <span class="text">Comments</span>
+                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#user_menu"
+                       aria-controls="user_menu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon lni lni-users"></span>
+                        <span class="text">Users</span>
                     </a>
-                    <ul id="ddmenu_2" class="collapse dropdown-nav">
+                    <ul id="user_menu" class="collapse dropdown-nav">
                         <li>
                             <a href="#"> Inquiry </a>
                         </li>
@@ -116,9 +116,24 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-has-children">
+                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2"
+                       aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon lni lni-comments"></span>
+                        <span class="text">Comments</span>
+                    </a>
+                    <ul id="ddmenu_2" class="collapse dropdown-nav">
+                        <li>
+                            <a href="#"> Inquiry </a>
+                        </li>
+                        <li>
+                            <a href="#"> Update </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-has-children">
                     <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_3"
                        aria-controls="ddmenu_3" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="icon lni lni-comments"></span>
+                        <span class="icon lni lni-package"></span>
                         <span class="text">Categories</span>
                     </a>
                     <ul id="ddmenu_3" class="collapse dropdown-nav">
@@ -139,7 +154,7 @@
             </span>
             <li class="nav-item">
                 <a href="#">
-                    <span class="icon lni lni-comments"></span>
+                    <span class="icon lni lni-comments-reply"></span>
                     <span class="text">Notifications</span>
                 </a>
             </li>
@@ -212,10 +227,13 @@
     <section class="section">
         <div class="container-fluid">
             <div class="title-wrapper pt-30">
-                <div class="row align-items-center">
+                <div class="row d-flex justify-content-between">
                     <div class="col-md-6">
-                        <div class="title">
-                            <h2>@yield('title')</h2>
+                        <div class="title d-inline-flex">
+                             <a href="{{ url()->previous() }}" class="btn btn-secondary d-flex align-items-center">
+                                <i class="lni lni-chevron-left"></i>
+                            </a>
+                            <h2 class="mx-3">@yield('title')</h2>
                         </div>
                     </div>
                     <div class="col-md-6">

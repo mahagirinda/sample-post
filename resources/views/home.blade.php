@@ -49,10 +49,17 @@
                             </p>
                             <small class="text-muted text-xs">
                                 {{ Carbon::parse($post->created_at)->format('d F Y - H:i') }} <br>
-                                Posted by : {{ $post->user->name }}
+                                Posted by <b>{{ $post->user->name }}</b>
                                 @if($post->user->role == 'admin')
                                     &nbsp;<span class="badge bg-info">Admin</span>
                                 @endif
+                            </small>
+                            <br>
+                            <hr>
+                            <small class="text-muted text-xs align-content-center">
+                                <span class="icon lni lni-eye mx-1"></span> <b>{{ $post->visit_counts }}</b>
+                                <span class="mx-2"></span>
+                                <span class="icon lni lni-comments mx-1"></span> <b>{{ $post->comments_count  }}</b>
                             </small>
                             <a href="{{ route('post.view', ['id' => $post->id]) }}" class="stretched-link"></a>
                         </div>

@@ -35,59 +35,67 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($posts as $post)
+            @if($posts->isEmpty())
                 <tr>
-                    <td class="align-content-center">
-                        {{ $post->title }}
-                    </td>
-                    <td class="text-center align-content-center">
-                        @if($post->draft)
-                            <span class="text-success icon lni lni-checkmark-circle"></span>
-                        @else
-                            <span class="text-danger icon lni lni-circle-minus"></span>
-                        @endif
-                    </td>
-                    <td class="align-content-center">
-                        <img src="{{ url('storage/image/post/' . $post->image) }}" class="inquiry-image-post"
-                             alt="{{ "content-image-".$post->id }}" loading="lazy">
-                    </td>
-                    <td class="align-content-center">
-                        {{ $post->category->name }}
-                    </td>
-                    <td class="align-content-center">
-                        <div class="accordion">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="{{ "#content-collapse-".$post->id }}" aria-expanded="false"
-                                            aria-controls="{{ "content-collapse-".$post->id }}">
-                                        Show Content
-                                    </button>
-                                </h2>
-                                <div id="{{ "content-collapse-".$post->id }}" class="accordion-collapse collapse"
-                                     data-bs-parent="{{ "content-".$post->id }}">
-                                    <div class="accordion-body">
-                                        {{ $post->contents }}
+                    <td colspan="8" class="text-center">No Post Data</td>
+                </tr>
+            @else
+                @foreach($posts as $post)
+                    <tr>
+                        <td class="align-content-center">
+                            {{ $post->title }}
+                        </td>
+                        <td class="text-center align-content-center">
+                            @if($post->draft)
+                                <span class="text-success icon lni lni-checkmark-circle"></span>
+                            @else
+                                <span class="text-danger icon lni lni-circle-minus"></span>
+                            @endif
+                        </td>
+                        <td class="align-content-center">
+                            <img src="{{ url('storage/image/post/' . $post->image) }}" class="inquiry-image-post"
+                                 alt="{{ "content-image-".$post->id }}" loading="lazy">
+                        </td>
+                        <td class="align-content-center">
+                            {{ $post->category->name }}
+                        </td>
+                        <td class="align-content-center">
+                            <div class="accordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="{{ "#content-collapse-".$post->id }}"
+                                                aria-expanded="false"
+                                                aria-controls="{{ "content-collapse-".$post->id }}">
+                                            Show Content
+                                        </button>
+                                    </h2>
+                                    <div id="{{ "content-collapse-".$post->id }}" class="accordion-collapse collapse"
+                                         data-bs-parent="{{ "content-".$post->id }}">
+                                        <div class="accordion-body">
+                                            {{ $post->contents }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                    <td class="text-center align-content-center">
-                        {{ $post->user->name }}
-                    </td>
-                    <td class="text-center align-content-center">
-                        <small>{{ Carbon::parse($post->created_at)->format('d F Y - H:i') }}</small>
-                    </td>
-                    <td class="text-center align-content-center">
-                        @if($post->created_at != $post->updated_at)
-                            <span class="text-success icon lni lni-checkmark-circle"></span>
-                        @else
-                            <span class="text-danger icon lni lni-circle-minus"></span>
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
+                        </td>
+                        <td class="text-center align-content-center">
+                            {{ $post->user->name }}
+                        </td>
+                        <td class="text-center align-content-center">
+                            <small>{{ Carbon::parse($post->created_at)->format('d F Y - H:i') }}</small>
+                        </td>
+                        <td class="text-center align-content-center">
+                            @if($post->created_at != $post->updated_at)
+                                <span class="text-success icon lni lni-checkmark-circle"></span>
+                            @else
+                                <span class="text-danger icon lni lni-circle-minus"></span>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
             </tbody>
         </table>
     </div>

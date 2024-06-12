@@ -21,8 +21,9 @@ class PostController extends Controller
     function home(): View
     {
         $posts = Post::where('draft', 0)
-                 ->orderBy('created_at', 'desc')
-                 ->paginate(6);
+                ->withCount('comments')
+                ->orderBy('created_at', 'desc')
+                ->paginate(6);
         return view('home', compact('posts'));
     }
 
@@ -44,6 +45,9 @@ class PostController extends Controller
     {
         $post = Post::where('id', $id)->firstOrFail();
         if (!$post->draft) {
+            $post->timestamps = false;
+            $post->visit_counts = $post->visit_counts + 1;
+            $post->save();
             return view('post.view', compact('post'));
         } else {
             return redirect()->back()->with("error", "Post on draft cannot be viewed!.");
