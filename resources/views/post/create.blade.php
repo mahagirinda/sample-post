@@ -18,22 +18,15 @@
 @endsection
 
 @section('content')
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
     <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        <div class="mb-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="draft" name="draft">
+                <label class="form-check-label" for="flexSwitchCheckChecked">Set as Draft</label>
+            </div>
+        </div>
+
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title"
@@ -53,9 +46,13 @@
 
         <div class="mb-3">
             <label for="category" class="form-label">Category</label>
-            <input type="text" class="form-control @error('category') is-invalid @enderror" id="category"
-                   name="category" value="{{ old('category') }}">
-            @error('category')
+            <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id"
+                    required>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+            @error('category_id')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>

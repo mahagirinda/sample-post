@@ -7,9 +7,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @property mixed $id
+ * @property mixed $draft
  * @property string $title
  * @property file image
- * @property string category
+ * @property string category_id
  * @property string post_content
  */
 class PostRequest extends FormRequest
@@ -30,8 +31,8 @@ class PostRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'title' => 'required|string|min:5|max:255',
-            'category' => 'required|string|min:3|max:255',
+            'title' => 'required|string|min:5|max:100',
+            'category_id' => 'required|integer',
             'post_content' => 'required|string',
         ];
 

@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @method static create(array $data)
+ * @method static create(array $category)
+ * @method static orderBy(string $string, string $string1)
  */
-class User extends Model
+class Category extends Model
 {
     use HasFactory;
 
@@ -18,22 +19,9 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'role',
         'name',
-        'image',
-        'email',
-        'email_verified_at',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+        'detail',
+        'status',
     ];
 
     /**
@@ -43,6 +31,6 @@ class User extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'email_verified_at' => 'timestamp',
+        'status' => 'boolean',
     ];
 }

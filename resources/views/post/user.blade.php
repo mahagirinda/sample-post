@@ -1,6 +1,8 @@
+@php use Carbon\Carbon; @endphp
+
 @extends('layout.app')
 
-@section('title', 'Edit')
+@section('title', 'My Post')
 
 @section('breadcrumb')
     <div class="breadcrumb-wrapper">
@@ -10,7 +12,7 @@
                     <a href="{{ route('home') }}">Post</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Edit
+                    My Post
                 </li>
             </ol>
         </nav>
@@ -19,14 +21,16 @@
 
 @section('content')
     <div class="table-responsive">
-        <table class="table table-striped table-borderless">
+        <table class="table table-striped table-borderless table-responsive">
             <thead>
             <tr>
                 <th scope="col" class="col-2">Title</th>
                 <th scope="col" class="col-1 text-center">Draft</th>
+                <th scope="col" class="col-1">Image</th>
                 <th scope="col" class="col-1">Category</th>
-                <th scope="col" class="col-7">Content</th>
-                <th scope="col" class="col-1 text-center">Action</th>
+                <th scope="col" class="col-4">Content</th>
+                <th scope="col" class="col-2 text-center">Created At</th>
+                <th scope="col" class="col-1 text-center">Updated</th>
             </tr>
             </thead>
             <tbody>
@@ -41,6 +45,10 @@
                         @else
                             <span class="text-danger icon lni lni-circle-minus"></span>
                         @endif
+                    </td>
+                    <td class="align-content-center">
+                        <img src="{{ url('storage/image/post/' . $post->image) }}" class="inquiry-image-post"
+                             alt="{{ "content-image-".$post->id }}" loading="lazy">
                     </td>
                     <td class="align-content-center">
                         {{ $post->category->name }}
@@ -65,7 +73,14 @@
                         </div>
                     </td>
                     <td class="text-center align-content-center">
-                        <a href="{{ route('post.edit', $post->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                        <small>{{ Carbon::parse($post->created_at)->format('d F Y - H:i') }}</small>
+                    </td>
+                    <td class="text-center align-content-center">
+                        @if($post->created_at != $post->updated_at)
+                            <span class="text-success icon lni lni-checkmark-circle"></span>
+                        @else
+                            <span class="text-danger icon lni lni-circle-minus"></span>
+                        @endif
                     </td>
                 </tr>
             @endforeach

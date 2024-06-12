@@ -21,25 +21,18 @@
 @endsection
 
 @section('content')
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
     <form action="{{ route('post.update', $post->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <input type="hidden" name="id" value="{{ old('id', $post->id) }}">
+
+        <div class="mb-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="draft" name="draft" @if($post->draft) checked @endif>
+                <label class="form-check-label" for="flexSwitchCheckChecked">Set as Draft</label>
+            </div>
+        </div>
 
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
@@ -72,9 +65,14 @@
 
         <div class="mb-3">
             <label for="category" class="form-label">Category</label>
-            <input type="text" class="form-control @error('category') is-invalid @enderror" id="category"
-                   name="category" value="{{ old('category', $post->category) }}">
-            @error('category')
+            <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id"
+                    required>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}"
+                            @if($category->id == $post->category->id) selected @endif>{{ $category->name }} </option>
+                @endforeach
+            </select>
+            @error('category_id')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
@@ -82,7 +80,7 @@
         <div class="mb-3">
             <label for="post_content" class="form-label">Content</label>
             <textarea class="form-control @error('content') is-invalid @enderror" id="post_content"
-                      name="post_content" rows="5">{{ old('content', $post->content) }}</textarea>
+                      name="post_content" rows="5">{{ old('content', $post->contents) }}</textarea>
             @error('content')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror

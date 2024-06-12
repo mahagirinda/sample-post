@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Category;
 use App\Models\Post;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -19,19 +20,34 @@ class PostController extends Controller
 
     function home(): View
     {
-        $posts = Post::orderBy('created_at', 'desc')->paginate(6);
+        $posts = Post::where('draft', 0)
+                 ->orderBy('created_at', 'desc')
+                 ->paginate(6);
         return view('home', compact('posts'));
     }
 
     function create(): View
     {
-        return view('post.create');
+        $categories = Category::orderBy('name', 'asc')->get();
+        return view('post.create', compact('categories'));
     }
 
-    function view(String $id): View
+    function user(): View
+    {
+        // $id = Auth::user()->id;
+        $id = '1';
+        $posts = Post::where('user_id', $id)->paginate(10);
+        return view('post.user', compact('posts'));
+    }
+
+    function view(String $id): View | RedirectResponse
     {
         $post = Post::where('id', $id)->firstOrFail();
-        return view('post.view', compact('post'));
+        if (!$post->draft) {
+            return view('post.view', compact('post'));
+        } else {
+            return redirect()->back()->with("error", "Post on draft cannot be viewed!.");
+        }
     }
 
     public function store(PostRequest $request): RedirectResponse
@@ -39,13 +55,16 @@ class PostController extends Controller
         try {
             $post = new Post();
             $post->title = $request->title;
+            $post->draft = $request->draft === "on";
+            // $post->user_id = Auth::user()->id;
+            $post->user_id = 1;
             if ($request->hasFile('image')) {
                 $imageName = time() . '.' . request()->image->getClientOriginalExtension();
                 $request->file('image')->storeAs('image/post', $imageName, 'public');
                 $post->image = $imageName;
             }
-            $post->category = $request->category;
-            $post->content = $request->post_content;
+            $post->category_id = $request->category_id;
+            $post->contents = $request->post_content;
             $post->save();
         } catch (Exception $e) {
             Log::channel('log-error')->error($e->getMessage());
@@ -59,23 +78,29 @@ class PostController extends Controller
 
     function edit_list(): View
     {
-        $posts = Post::all();
+        $posts = Post::paginate(10);
         return view('post.edit-list', compact('posts'));
     }
 
     function edit($id): View
     {
         $post = Post::where('id', $id)->first();
-        return view('post.edit')->with('post', $post);
+        $categories = Category::orderBy('name', 'asc')->get();
+        return view('post.edit', compact('post', 'categories'));
     }
 
     public function update(PostRequest $request): RedirectResponse
     {
         $post = Post::where('id', $request->id)->first();
         try {
+            if ($this->checkUpdateDraftOnly($post, $request)) {
+                $post->timestamps = false;
+            }
+
             $post->title = $request->title;
-            $post->category = $request->category;
-            $post->content = $request->post_content;
+            $post->draft = $request->draft === "on";
+            // $post->user_id = Auth::user()->id;
+            $post->user_id = 1;
             if ($request->hasFile('image')) {
                 if (Storage::disk('public')->exists('image/post/' . $post->image)) {
                     Storage::disk('public')->delete('image/post/' . $post->image);
@@ -84,6 +109,8 @@ class PostController extends Controller
                 $request->file('image')->storeAs('image/post', $imageName, 'public');
                 $post->image = $imageName;
             }
+            $post->category_id = $request->category_id;
+            $post->contents = $request->post_content;
             $post->save();
         } catch (Exception $e) {
             Log::channel('log-error')->error($e->getMessage());
@@ -98,7 +125,18 @@ class PostController extends Controller
 
     function inquiry(): View
     {
-        $posts = Post::all();
+        $posts = Post::paginate(10);
         return view('post.inquiry', compact('posts'));
+    }
+
+    function checkUpdateDraftOnly(Post $post, PostRequest $updatedRequest): bool
+    {
+        if ($post->draft == "on" && $updatedRequest->draft) {
+            return true;
+        }
+        if ($post->draft == "off" && !$updatedRequest->draft) {
+            return true;
+        }
+        return false;
     }
 }

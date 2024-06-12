@@ -1,4 +1,4 @@
-@php use Illuminate\Support\Str; @endphp
+@php use Carbon\Carbon;use Illuminate\Support\Str; @endphp
 
 @extends('layout.app')
 
@@ -21,22 +21,45 @@
 
 @section('content')
     <div class="row row-cols-md-3 gy-md-4 row-cols-1 gy-3">
-        @foreach($posts as $post)
-            <div class="col">
-                <div class="card">
-                    <img src="{{ url('storage/image/post/' . $post->image) }}" loading="lazy" class="card-img-top"
-                         alt="{{ $post->title }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $post->title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><small>Category : {{ $post->category }}</small></h6>
-                        <p class="card-text">
-                            {{ Str::limit($post->content) }}
-                        </p>
-                        <a href="{{ route('post.view', ['id' => $post->id]) }}" class="stretched-link"></a>
-                    </div>
+        @if ($posts->isEmpty())
+            <div class="col-md-12">
+                <div class="card p-5">
+                    <p class="text-center">
+                        No Post Yet
+                    </p>
+                    <a href="{{ route('post.create') }}" class="btn btn-lg btn-primary mt-4"> Create Post</a>
                 </div>
             </div>
-        @endforeach
+        @else
+            @foreach($posts as $post)
+                <div class="col">
+                    <div class="card">
+                        <img src="{{ url('storage/image/post/' . $post->image) }}" loading="lazy" class="card-img-top"
+                             alt="{{ $post->title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ $post->title }}
+                                @if($post->created_at != $post->updated_at)
+                                    &nbsp;<span class="badge bg-secondary">Edited</span>
+                                @endif
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><small>{{ $post->category->name }}</small></h6>
+                            <p class="card-text mb-2">
+                                {{ Str::limit($post->contents) }}
+                            </p>
+                            <small class="text-muted text-xs">
+                                {{ Carbon::parse($post->created_at)->format('d F Y - H:i') }} <br>
+                                Posted by : {{ $post->user->name }}
+                                @if($post->user->role == 'admin')
+                                    &nbsp;<span class="badge bg-info">Admin</span>
+                                @endif
+                            </small>
+                            <a href="{{ route('post.view', ['id' => $post->id]) }}" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @endif
     </div>
 
     <div class="d-flex justify-content-center mt-4">

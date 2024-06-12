@@ -6,19 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * @method static orderBy(string $string, string $string1)
- * @method static where(string $string, String $id)
- * @method static get()
- * @method static paginate(int $int)
- * @property mixed|integer $user_id
- * @property mixed|string $title
- * @property mixed|boolean $draft
- * @property mixed|string $image
- * @property mixed|string $category_id
- * @property mixed|string $contents
- */
-class Post extends Model
+class Favorite extends Model
 {
     use HasFactory;
 
@@ -29,12 +17,7 @@ class Post extends Model
      */
     protected $fillable = [
         'user_id',
-        'draft',
-        'title',
-        'image',
         'category_id',
-        'contents',
-        'visit_counts',
     ];
 
     /**
@@ -45,9 +28,7 @@ class Post extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'draft' => 'boolean',
         'category_id' => 'integer',
-        'visit_counts' => 'integer',
     ];
 
     public function user(): BelongsTo

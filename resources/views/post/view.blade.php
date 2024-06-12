@@ -22,7 +22,7 @@
 
 @section('content')
     <div class="container-fluid m-0 p-0">
-        <div class="card">
+        <div class="card p-2">
             <div class="card-body">
                 <div class="row row-cols-1">
                     <div class="col">
@@ -30,14 +30,15 @@
                              alt="{{ $post->title }}">
                     </div>
                     <div class="col mt-4 m-2">
-                        <small class="text-muted">{{ $post->category }}</small>
-                        <p class="text-black">
-                            {{ $post->content }}
+                        <h4 class="text-muted"><span class="badge bg-secondary">{{ $post->category->name }}</span></h4> <br>
+                        <small class="text-muted">by : {{ $post->user->name }}</small> <br>
+                        <small class="text-muted text-xs">{{ $post->created_at }}</small>
+                        <p class="text-black mt-2">
+                            {{ $post->contents }}
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 @endsection

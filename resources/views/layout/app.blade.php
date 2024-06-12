@@ -48,8 +48,8 @@
             <span class="divider">
                 <hr/>
             </span>
-            <li class="nav-item">
-                <a href="#">
+            <li class="nav-item {{ Request::routeIs('post.user') ? 'active' : '' }}">
+                <a href="{{ route('post.user') }}">
                     <span class="icon lni lni-user"></span>
                     <span class="text">My Post</span>
                 </a>
@@ -223,6 +223,21 @@
                     </div>
                 </div>
             </div>
+
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @yield('content')
         </div>
     </section>
@@ -243,7 +258,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="terms d-flex justify-content-center justify-content-md-end">
-                        <span class="text-sm">Pemrograman Web</span>
+                        <span class="text-sm">Pemrograman Web II</span>
                         <a href="https://pnb.ac.id/" class="text-sm ml-15">Politeknik Negeri Bali</a>
                     </div>
                 </div>
