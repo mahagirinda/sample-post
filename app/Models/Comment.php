@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $post_id
  * @property mixed $comment
  * @method static where(string $string, string $id)
+ * @method static paginate(int $int)
  */
 class Comment extends Model
 {

@@ -14,9 +14,9 @@ class RoleMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  Closure(Request): (Response)  $next
+     * @param Closure(Request): (Response) $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, $role)
     {
         Log::info("URL yang diakses adalah " . $request->url());
 
@@ -26,7 +26,7 @@ class RoleMiddleware
         if (!$is_authenticated) {
             $log_error = Log::channel('log-error');
             $log_error->error("Ada akses terlarang belum login ke url : " . $request->url());
-            return response('Anda login terlebih dahulu!', 401);
+            return redirect()->back()->with("error", "You must be logged in to access this page.");
         }
 
         // $user_role = Auth::user()->role;
@@ -34,7 +34,7 @@ class RoleMiddleware
         if ($user_role != $role && $role != 'all') {
             $log_error = Log::channel('log-error');
             $log_error->error("Ada akses terlarang sebagai admin ke url : " . $request->url());
-            return response('Hanya bisa diakses oleh admin!', 401);
+            return redirect()->back()->with("error", "You are not allowed to access this page!");
         }
 
         View::share('role', $user_role);

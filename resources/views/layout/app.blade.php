@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="shortcut icon" href="{{ url("images/favicon.svg") }}" type="image/x-icon"/>
-    <title>Simple Post - @yield('title')</title>
+    <title>{{ env('APP_NAME') }} - @yield('title')</title>
 
     <link rel="stylesheet" href="{{ url("css/bootstrap.min.css") }}"/>
     <link rel="stylesheet" href="{{ url("css/lineicons.css") }}" type="text/css"/>
@@ -48,13 +48,13 @@
             <span class="divider">
                 <hr/>
             </span>
-            <li class="nav-item {{ Request::routeIs('post.user') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::routeIs('post.user', 'post.user.edit') ? 'active' : '' }}">
                 <a href="{{ route('post.user') }}">
                     <span class="icon lni lni-user"></span>
                     <span class="text">My Post</span>
                 </a>
             </li>
-            <li class="nav-item {{ Request::routeIs('comment.user', 'comment.edit') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::routeIs('comment.user', 'comment.user.edit') ? 'active' : '' }}">
                 <a href="{{ route('comment.user') }}">
                     <span class="icon lni lni-user"></span>
                     <span class="text">My Comments</span>
@@ -135,17 +135,33 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-has-children">
-                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#comment_menu"
+                    <a href="#" class="
+                            @if(request()->routeIs(['comment.inquiry', 'comment.edit.list', 'comment.edit']))
+                               collapse
+                            @else
+                               collapsed
+                            @endif" data-bs-toggle="collapse" data-bs-target="#comment_menu"
                        aria-controls="comment_menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="icon lni lni-comments"></span>
                         <span class="text">Comments</span>
                     </a>
-                    <ul id="comment_menu" class="collapse dropdown-nav">
+                    <ul id="comment_menu" class="collapse
+                            @if(request()->routeIs(['comment.inquiry', 'comment.edit.list', 'comment.edit']))
+                               show
+                            @endif
+                            dropdown-nav">
                         <li>
-                            <a href="#"> Inquiry </a>
+                            <a href="{{ route('comment.inquiry')  }}"
+                               class="{{ request()->routeIs('comment.inquiry') ? 'active' : '' }}"> Inquiry </a>
                         </li>
                         <li>
-                            <a href="#"> Update </a>
+                            <a href="{{ route('comment.edit.list')  }}"
+                               class="
+                               @if(request()->routeIs(['comment.edit.list', 'comment.edit']))
+                                   active
+                               @endif">
+                                Update
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -189,7 +205,7 @@
                 <hr/>
             </span>
             <li class="nav-item">
-                <a href="#">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#coming-soon">
                     <span class="icon lni lni-comments-reply"></span>
                     <span class="text">Notifications</span>
                 </a>
@@ -295,6 +311,8 @@
             @yield('content')
         </div>
     </section>
+
+    @include('layout.modal')
 
     <footer class="footer">
         <div class="container-fluid">

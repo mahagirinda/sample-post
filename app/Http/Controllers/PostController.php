@@ -97,6 +97,13 @@ class PostController extends Controller
         return view('post.edit', compact('post', 'categories'));
     }
 
+    function user_edit($id): View
+    {
+        $post = Post::where('id', $id)->first();
+        $categories = Category::where('status', 1)->orderBy('name', 'asc')->get();
+        return view('post.user-edit', compact('post', 'categories'));
+    }
+
     public function update(PostRequest $request): RedirectResponse
     {
         $post = Post::where('id', $request->id)->first();
@@ -129,6 +136,40 @@ class PostController extends Controller
 
         $parameter = ['id' => $post->id];
         return redirect()->route('post.edit', $parameter)->with('success', 'Post updated successfully!');
+    }
+
+    public function user_update(PostRequest $request): RedirectResponse
+    {
+        $post = Post::where('id', $request->id)->first();
+        try {
+            if ($this->checkUpdateDraftOnly($post, $request)) {
+                $post->timestamps = false;
+            }
+
+            $post->title = $request->title;
+            $post->draft = $request->draft === "on";
+            // $post->user_id = Auth::user()->id;
+            $post->user_id = 1;
+            if ($request->hasFile('image')) {
+                if (Storage::disk('public')->exists('image/post/' . $post->image)) {
+                    Storage::disk('public')->delete('image/post/' . $post->image);
+                }
+                $imageName = time() . '.' . request()->image->getClientOriginalExtension();
+                $request->file('image')->storeAs('image/post', $imageName, 'public');
+                $post->image = $imageName;
+            }
+            $post->category_id = $request->category_id;
+            $post->contents = $request->post_content;
+            $post->save();
+        } catch (Exception $e) {
+            Log::channel('log-error')->error($e->getMessage());
+            return redirect()
+                ->route('post.edit', ['id' => $post->id])
+                ->with('error', "Error : " . $e->getMessage());
+        }
+
+        $parameter = ['id' => $post->id];
+        return redirect()->route('post.user.edit', $parameter)->with('success', 'Post updated successfully!');
     }
 
     function inquiry(): View

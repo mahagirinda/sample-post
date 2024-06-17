@@ -28,15 +28,15 @@
                 <th scope="col" class="col-1 text-center">Draft</th>
                 <th scope="col" class="col-1">Image</th>
                 <th scope="col" class="col-1">Category</th>
-                <th scope="col" class="col-4">Content</th>
+                <th scope="col" class="col-3">Content</th>
                 <th scope="col" class="col-2 text-center">Created At</th>
-                <th scope="col" class="col-1 text-center">Action</th>
+                <th scope="col" colspan="2" class="col-2 text-center">Action</th>
             </tr>
             </thead>
             <tbody>
             @if($posts->isEmpty())
                 <tr>
-                    <td colspan="7" class="text-center">You don't have any post yet</td>
+                    <td colspan="8" class="text-center">You don't have any post yet</td>
                 </tr>
             @else
                 @foreach($posts as $post)
@@ -91,6 +91,9 @@
                         </td>
                         <td class="text-center align-content-center">
                             <a href="{{ route('post.view', $post->id) }}" class="btn btn-sm btn-primary">View</a>
+                        </td>
+                        <td class="text-center align-content-center">
+                            <a href="{{ route('post.user.edit', $post->id) }}" class="btn btn-sm btn-primary">Edit</a>
                         </td>
                     </tr>
                 @endforeach

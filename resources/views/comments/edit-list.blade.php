@@ -2,7 +2,7 @@
 
 @extends('layout.app')
 
-@section('title', 'Inquiry Comment')
+@section('title', 'Edit Comment')
 
 @section('breadcrumb')
     <div class="breadcrumb-wrapper">
@@ -12,7 +12,7 @@
                     <a href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Inquiry Comment
+                    Edit Comment
                 </li>
             </ol>
         </nav>
@@ -24,18 +24,18 @@
         <table class="table table-striped table-borderless">
             <thead>
             <tr>
-                <th scope="col" class="col-2">By</th>
-                <th scope="col" class="col-1">Comment</th>
-                <th scope="col" class="col-1">Post Title</th>
+                <th scope="col" class="col-1">By</th>
+                <th scope="col" class="col-2">Comment</th>
+                <th scope="col" class="col-2">Post Title</th>
                 <th scope="col" class="col-1">Post Owner</th>
                 <th scope="col" class="col-2 text-center">Created At</th>
-                <th scope="col" class="col-1 text-center">Updated</th>
+                <th scope="col" colspan="2" class="col-2 text-center">Action</th>
             </tr>
             </thead>
             <tbody>
             @if($comments->isEmpty())
                 <tr>
-                    <td colspan="6" class="text-center">No Comments Data</td>
+                    <td colspan="6" class="text-center">No Comments Data to Update</td>
                 </tr>
             @else
                 @foreach($comments as $comment)
@@ -58,11 +58,11 @@
                             <small>{{ Carbon::parse($comment->created_at)->format('d F Y - H:i') }}</small>
                         </td>
                         <td class="text-center align-content-center">
-                            @if($comment->created_at != $comment->updated_at)
-                                <span class="text-success icon lni lni-checkmark-circle"></span>
-                            @else
-                                <span class="text-danger icon lni lni-circle-minus"></span>
-                            @endif
+                            <a href="{{ route('post.view', $comment->post->id) }}" class="btn btn-sm btn-primary">View
+                                Post</a>
+                        </td>
+                        <td class="text-center align-content-center">
+                            <a href="{{ route('comment.edit', $comment->id) }}" class="btn btn-sm btn-primary">Edit</a>
                         </td>
                     </tr>
                 @endforeach

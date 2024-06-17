@@ -9,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('home') }}">Comment</a>
+                    <a href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
                     My Comments
@@ -56,7 +56,7 @@
                                 Post</a>
                         </td>
                         <td class="text-center align-content-center">
-                            <a href="{{ route('comment.edit', $comment->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{{ route('comment.user.edit', $comment->id) }}" class="btn btn-sm btn-primary">Edit</a>
                         </td>
                     </tr>
                 @endforeach

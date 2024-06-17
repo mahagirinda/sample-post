@@ -11,10 +11,10 @@
                     <a href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('comment.edit.list') }}">Edit</a>
+                    <a href="{{ route('comment.user') }}">My Comments</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    {{ $comment->comment }}
+                    Edit
                 </li>
             </ol>
         </nav>
@@ -22,7 +22,7 @@
 @endsection
 
 @section('content')
-    <form action="{{ route('comment.update', $comment->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('comment.user.update', $comment->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 

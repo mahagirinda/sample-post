@@ -28,6 +28,8 @@ Route::middleware("role:all")->group(function () {
             Route::get('create', 'create')->name('post.create');
             Route::post('create', 'store')->name('post.store');
             Route::get('user', 'user')->name('post.user');
+            Route::get('user-edit/{id}', 'user_edit')->name('post.user.edit');
+            Route::put('user-update', 'user_update')->name('post.user.update');
             Route::get('view/{id}', 'view')->name('post.view');
         });
     });
@@ -36,9 +38,9 @@ Route::middleware("role:all")->group(function () {
         Route::controller(CommentController::class)->group(function () {
             Route::post('create', 'store')->name('comment.store');
             Route::get('user', 'user')->name('comment.user');
-            Route::get('edit/{id}', 'edit')->name('comment.edit')
-                ->where('id', '[0-9]+');
-            Route::put('update', 'update')->name('comment.update');
+            Route::get('user-edit/{id}', 'user_edit')->name('comment.user.edit');
+            Route::put('user-update', 'user_update')->name('comment.user.update');
+            Route::get('view/{id}', 'view')->name('comment.view');
         });
     });
 });
@@ -50,8 +52,18 @@ Route::middleware("role:admin")->group(function () {
             Route::get('inquiry', 'inquiry')->name('post.inquiry');
             Route::get('edit-list', 'edit_list')->name('post.edit.list');
             Route::get('edit/{id}', 'edit')->name('post.edit')
-                ->where('id', '[0-9]+');;
+                ->where('id', '[0-9]+');
             Route::put('update', 'update')->name('post.update');
+        });
+    });
+
+    Route::prefix("comment")->group(function () {
+        Route::controller(CommentController::class)->group(function () {
+            Route::get('inquiry', 'inquiry')->name('comment.inquiry');
+            Route::get('edit-list', 'edit_list')->name('comment.edit.list');
+            Route::get('edit/{id}', 'edit')->name('comment.edit')
+                ->where('id', '[0-9]+');
+            Route::put('update', 'update')->name('comment.update');
         });
     });
 

@@ -3,14 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentRequest;
-use App\Http\Requests\PostRequest;
-use App\Models\Category;
 use App\Models\Comment;
-use App\Models\Post;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CommentController extends Controller
@@ -41,10 +37,22 @@ class CommentController extends Controller
         return view('comments.user', compact('comments'));
     }
 
+    function edit_list(): View
+    {
+        $comments = Comment::paginate(10);
+        return view('comments.edit-list', compact('comments'));
+    }
+
     function edit($id): View
     {
         $comment = Comment::where('id', $id)->first();
         return view('comments.edit', compact('comment'));
+    }
+
+    function user_edit($id): View
+    {
+        $comment = Comment::where('id', $id)->first();
+        return view('comments.user-edit', compact('comment'));
     }
 
     public function update(CommentRequest $request): RedirectResponse
@@ -62,5 +70,28 @@ class CommentController extends Controller
 
         $parameter = ['id' => $comment->id];
         return redirect()->route('comment.edit', $parameter)->with('success', 'Comment updated successfully!');
+    }
+
+    public function user_update(CommentRequest $request): RedirectResponse
+    {
+        $comment = Comment::where('id', $request->id)->first();
+        try {
+            $comment->comment = $request->comment;
+            $comment->save();
+        } catch (Exception $e) {
+            Log::channel('log-error')->error($e->getMessage());
+            return redirect()
+                ->route('comment.edit', ['id' => $comment->id])
+                ->with('error', "Error : " . $e->getMessage());
+        }
+
+        $parameter = ['id' => $comment->id];
+        return redirect()->route('comment.user.edit', $parameter)->with('success', 'Comment updated successfully!');
+    }
+
+    function inquiry(): View
+    {
+        $comments = Comment::paginate(20);
+        return view('comments.inquiry', compact('comments'));
     }
 }
