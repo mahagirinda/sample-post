@@ -12,3 +12,17 @@
     object-fit: cover;
     height: 250px;
 }
+
+.image-profile-md {
+    max-height: 50px;
+    max-width: 50px;
+    object-fit: cover;
+    border-radius: 25px;
+}
+
+.image-profile-sm {
+    max-height: 20px;
+    max-width: 20px;
+    object-fit: cover;
+    border-radius: 10px;
+}

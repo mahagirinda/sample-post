@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $comment
  * @method static where(string $string, string $id)
  * @method static paginate(int $int)
+ * @method static orderBy(string $string, string $string1)
  */
 class Comment extends Model
 {

@@ -25,10 +25,12 @@
                         No Post Yet
                     </p>
                     <small class="text-center text-muted my-3">
-                        Hey there! We're looking for awesome people to help us create awesome content. Wanna join the fun?
+                        Hey there! We're looking for awesome people to help us create awesome content. Wanna join the
+                        fun?
                     </small>
                     <small class="text-center text-muted mb-3">
-                        Share your thoughts, experiences, or expertise by creating a post below. Click the <b>Create Post</b> button to get started and join the conversation!
+                        Share your thoughts, experiences, or expertise by creating a post below. Click the <b>Create
+                            Post</b> button to get started and join the conversation!
                     </small>
                     <a href="{{ route('post.create') }}" class="btn btn-lg btn-primary mt-4"> Create Post</a>
                 </div>
@@ -50,14 +52,18 @@
                             <p class="card-text mb-2">
                                 {{ Str::limit($post->contents) }}
                             </p>
-                            <small class="text-muted text-xs">
+                            <div class="text-muted text-xs">
                                 {{ Carbon::parse($post->created_at)->format('d F Y - H:i') }} <br>
-                                Posted by <b>{{ $post->user->name }}</b>
-                                @if($post->user->role == 'admin')
-                                    &nbsp;<span class="badge bg-info">Admin</span>
-                                @endif
-                            </small>
-                            <br>
+                                <div class="align-content-center d-flex align-items-center my-2">
+                                    <img src="{{ url('storage/image/user/' . $post->user->image) }}"
+                                         class="image-profile-sm mr-10"
+                                         alt="{{ "content-image-" . $post->user->name }}" loading="lazy">
+                                    {{ $post->user->name }}
+                                    @if($post->user->role == 'admin')
+                                        &nbsp;<span class="badge bg-info ml-5">Admin</span>
+                                    @endif
+                                </div>
+                            </div>
                             <hr>
                             <small class="text-muted text-xs align-content-center">
                                 <span class="icon lni lni-eye mx-1"></span> <b>{{ $post->visit_counts }}</b>

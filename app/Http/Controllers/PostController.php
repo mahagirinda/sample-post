@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +17,23 @@ class PostController extends Controller
 {
     function dashboard(): View
     {
-        return view('dashboard');
+        $dashboard = (object) array();
+        $dashboard->post = Post::count();
+        $dashboard->user = User::count();
+        $dashboard->comment = Comment::count();
+
+        $posts = Post::where('draft', 0)
+            ->whereHas('category', function ($query) {
+                $query->where('status', 1);
+            })
+            ->withCount('comments')
+            ->orderBy('created_at', 'desc')
+            ->limit(3)->paginate(3);
+
+        $comments = Comment::orderBy('created_at', 'desc')
+            ->limit(3)->paginate(3);
+
+        return view('dashboard', compact('dashboard','posts', 'comments'));
     }
 
     function home(): View

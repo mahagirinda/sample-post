@@ -39,15 +39,16 @@
                                 {{ $post->category->name }}
                             </span>
                         </h4>
-                        <br>
-                        <small class="text-muted">
-                            by <b>{{ $post->user->name }}</b>
+                        <div class="align-content-center d-flex align-items-center text-muted text-xs my-3 mt-4">
+                            <img src="{{ url('storage/image/user/' . $post->user->image) }}"
+                                 class="image-profile-sm mr-10"
+                                 alt="{{ "content-image-" . $post->user->name }}" loading="lazy">
+                            {{ $post->user->name }}
                             @if($post->user->role == 'admin')
                                 &nbsp;<span class="badge bg-info">Admin</span>
                             @endif
-                        </small> <br>
-                        <small
-                            class="text-muted text-xs">{{ Carbon::parse($post->created_at)->format('d F Y - H:i') }}</small>
+                        </div>
+                        <small class="text-muted text-xs">{{ Carbon::parse($post->created_at)->format('d F Y - H:i') }}</small>
                         <p class="text-black mt-2">
                             {{ $post->contents }}
                         </p>
@@ -91,18 +92,23 @@
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">
-                                    {{ $comment->user->name }}
-                                    @if($comment->user->id == $post->user->id)
-                                        &nbsp;<span class="badge bg-success">Owner</span>
-                                    @endif
-                                    @if($comment->created_at != $comment->updated_at)
-                                        &nbsp;<span class="badge bg-secondary">Edited</span>
-                                    @endif
-                                    @if($post->user->role == 'admin')
-                                        &nbsp;<span class="badge bg-info">Admin</span>
-                                    @endif
-                                </h5>
+                                <div class="card-title mb-3">
+                                    <div class="align-content-center d-flex align-items-center">
+                                        <img src="{{ url('storage/image/user/' . $comment->user->image) }}"
+                                             class="image-profile-sm mr-10"
+                                             alt="{{ "content-image-" . $comment->user->name }}" loading="lazy">
+                                        {{ $comment->user->name }}
+                                        @if($comment->user->id == $post->user->id)
+                                            &nbsp;<span class="badge bg-success ml-5">Owner</span>
+                                        @endif
+                                        @if($comment->created_at != $comment->updated_at)
+                                            &nbsp;<span class="badge bg-secondary ml-5">Edited</span>
+                                        @endif
+                                        @if($post->user->role == 'admin')
+                                            &nbsp;<span class="badge bg-info ml-5">Admin</span>
+                                        @endif
+                                    </div>
+                                </div>
                                 <h6 class="card-subtitle mb-2 text-xs">{{ Carbon::parse($comment->created_at)->format('d F Y - H:i') }}</h6>
                                 <p class="card-text">
                                     {{ $comment->comment }}

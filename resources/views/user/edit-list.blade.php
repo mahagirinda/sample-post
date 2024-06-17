@@ -24,8 +24,7 @@
         <table class="table table-striped table-borderless">
             <thead>
             <tr>
-                <th scope="col" class="col-1">Image</th>
-                <th scope="col" class="col-4 text-center">Name</th>
+                <th scope="col" class="col-2">User</th>
                 <th scope="col" class="col-1">Role</th>
                 <th scope="col" class="col-2">Email</th>
                 <th scope="col" class="col-2 text-center">Registered At</th>
@@ -35,16 +34,14 @@
             <tbody>
             @if($users->isEmpty())
                 <tr>
-                    <td colspan="6" class="text-center">No User Data to Update</td>
+                    <td colspan="5" class="text-center">No User Data to Update</td>
                 </tr>
             @else
                 @foreach($users as $user)
                     <tr>
-                        <td class="align-content-center">
-                            <img src="{{ url('storage/image/user/' . $user->image) }}" class="inquiry-image-post"
-                                 alt="{{ "content-image-".$user->id }}" loading="lazy">
-                        </td>
-                        <td class="text-center align-content-center">
+                        <td class="align-content-center d-flex align-items-center">
+                            <img src="{{ url('storage/image/user/' . $user->image) }}" class="image-profile-md ml-15 mr-25"
+                                 alt="{{ "content-image-" . $user->name }}" loading="lazy">
                             {{ $user->name }}
                         </td>
                         <td class="align-content-center">

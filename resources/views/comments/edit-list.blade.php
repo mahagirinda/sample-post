@@ -41,7 +41,7 @@
                 @foreach($comments as $comment)
                     <tr>
                         <td class="align-content-center d-flex align-items-center">
-                            <img src="{{ url('storage/image/user/' . $comment->user->image) }}" class="inquiry-image-post mr-25"
+                            <img src="{{ url('storage/image/user/' . $comment->user->image) }}" class="image-profile-md ml-15 mr-25"
                                  alt="{{ "content-image-" . $comment->user->name }}" loading="lazy">
                             {{ $comment->user->name }}
                         </td>
