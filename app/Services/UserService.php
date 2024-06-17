@@ -21,7 +21,7 @@ class UserService
 
     public function getUserById($id)
     {
-        return User::where('id', $id)->get();
+        return User::where('id', $id)->first();
     }
 
     public function save(UserRequest $request): void

@@ -36,13 +36,13 @@ class CommentController extends Controller
     function user(): View
     {
         $id = '1'; // Auth::user()->id;
-        $comments = $this->commentService->getCommentById($id);
+        $comments = $this->commentService->getCommentsByUserId($id, 10);
         return view('comments.user', compact('comments'));
     }
 
     function edit_list(): View
     {
-        $comments = $this->commentService->getCommentById(10);
+        $comments = $this->commentService->getComments(10);
         return view('comments.edit-list', compact('comments'));
     }
 

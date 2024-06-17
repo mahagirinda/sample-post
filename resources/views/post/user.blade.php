@@ -90,7 +90,7 @@
                             <small>{{ Carbon::parse($post->created_at)->format('d F Y - H:i') }}</small>
                         </td>
                         <td class="text-center align-content-center">
-                            <a href="{{ route('post.view', $post->id) }}" class="btn btn-sm btn-primary">View</a>
+                            <a href="{{ route('post.view', $post->id) }}" class="btn btn-sm btn-primary">View Post</a>
                         </td>
                         <td class="text-center align-content-center">
                             <a href="{{ route('post.user.edit', $post->id) }}" class="btn btn-sm btn-primary">Edit</a>
