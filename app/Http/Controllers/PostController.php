@@ -21,15 +21,19 @@ class PostController extends Controller
     function home(): View
     {
         $posts = Post::where('draft', 0)
-                ->withCount('comments')
-                ->orderBy('created_at', 'desc')
-                ->paginate(6);
+            ->whereHas('category', function ($query) {
+                $query->where('status', 1);
+            })
+            ->withCount('comments')
+            ->orderBy('created_at', 'desc')
+            ->paginate(6);
+
         return view('home', compact('posts'));
     }
 
     function create(): View
     {
-        $categories = Category::orderBy('name', 'asc')->get();
+        $categories = Category::where('status', 1)->orderBy('name', 'asc')->get();
         return view('post.create', compact('categories'));
     }
 
@@ -41,7 +45,7 @@ class PostController extends Controller
         return view('post.user', compact('posts'));
     }
 
-    function view(String $id): View | RedirectResponse
+    function view(string $id): View|RedirectResponse
     {
         $post = Post::where('id', $id)->firstOrFail();
         if (!$post->draft) {
@@ -89,7 +93,7 @@ class PostController extends Controller
     function edit($id): View
     {
         $post = Post::where('id', $id)->first();
-        $categories = Category::orderBy('name', 'asc')->get();
+        $categories = Category::where('status', 1)->orderBy('name', 'asc')->get();
         return view('post.edit', compact('post', 'categories'));
     }
 

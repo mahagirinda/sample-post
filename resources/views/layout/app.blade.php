@@ -135,12 +135,12 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-has-children">
-                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_2"
-                       aria-controls="ddmenu_2" aria-expanded="false" aria-label="Toggle navigation">
+                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#comment_menu"
+                       aria-controls="comment_menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="icon lni lni-comments"></span>
                         <span class="text">Comments</span>
                     </a>
-                    <ul id="ddmenu_2" class="collapse dropdown-nav">
+                    <ul id="comment_menu" class="collapse dropdown-nav">
                         <li>
                             <a href="#"> Inquiry </a>
                         </li>
@@ -150,20 +150,37 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-has-children">
-                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#ddmenu_3"
-                       aria-controls="ddmenu_3" aria-expanded="false" aria-label="Toggle navigation">
+                    <a href="#" class="
+                            @if(request()->routeIs(['category.inquiry', 'category.create', 'category.edit.list', 'category.edit']))
+                               collapse
+                            @else
+                               collapsed
+                            @endif" data-bs-toggle="collapse" data-bs-target="#category_menu"
+                       aria-controls="category_menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="icon lni lni-package"></span>
                         <span class="text">Categories</span>
                     </a>
-                    <ul id="ddmenu_3" class="collapse dropdown-nav">
+                    <ul id="category_menu" class="collapse
+                            @if(request()->routeIs(['category.inquiry', 'category.create', 'category.edit.list', 'category.edit']))
+                               show
+                            @endif
+                            dropdown-nav">
                         <li>
-                            <a href="#"> Inquiry </a>
+                            <a href="{{ route('category.inquiry')  }}"
+                               class="{{ request()->routeIs('category.inquiry') ? 'active' : '' }}"> Inquiry </a>
                         </li>
                         <li>
-                            <a href="#"> Create </a>
+                            <a href="{{ route('category.create')  }}"
+                               class="{{ request()->routeIs('category.create') ? 'active' : '' }}"> Create </a>
                         </li>
                         <li>
-                            <a href="#"> Update </a>
+                            <a href="{{ route('category.edit.list')  }}"
+                               class="
+                               @if(request()->routeIs(['category.edit.list', 'category.edit']))
+                                   active
+                               @endif">
+                                Update
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -249,7 +266,7 @@
                 <div class="row d-flex justify-content-between">
                     <div class="col-md-6">
                         <div class="title d-inline-flex">
-                             <a href="{{ url()->previous() }}" class="btn btn-secondary d-flex align-items-center">
+                            <a href="{{ url()->previous() }}" class="btn btn-secondary d-flex align-items-center">
                                 <i class="lni lni-chevron-left"></i>
                             </a>
                             <h2 class="mx-3">@yield('title')</h2>
@@ -306,6 +323,7 @@
 
 <script src="{{ url("js/bootstrap.bundle.min.js") }}"></script>
 <script src="{{ url("js/main.js") }}"></script>
+@yield('additional-script', '')
 </body>
 
 </html>

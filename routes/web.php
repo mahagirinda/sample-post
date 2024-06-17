@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -64,6 +65,19 @@ Route::middleware("role:admin")->group(function () {
             Route::get('edit/{id}', 'edit')->name('user.edit')
                 ->where('id', '[0-9]+');
             Route::put('update', 'update')->name('user.update');
+        });
+    });
+
+    Route::prefix("category")->group(function () {
+        Route::controller(CategoryController::class)->group(function () {
+            Route::get('inquiry', 'inquiry')->name('category.inquiry');
+            Route::get('create', 'create')->name('category.create');
+            Route::post('create', 'store')->name('category.store');
+            Route::get('edit-list', 'edit_list')->name('category.edit.list');
+            Route::get('edit/{id}', 'edit')->name('category.edit')
+                ->where('id', '[0-9]+');
+            Route::put('update', 'update')->name('category.update');
+            Route::get('view/{id}', 'view')->name('category.view');
         });
     });
 });

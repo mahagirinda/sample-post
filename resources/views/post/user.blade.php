@@ -41,8 +41,15 @@
             @else
                 @foreach($posts as $post)
                     <tr>
-                        <td class="align-content-center">
+                        <td class="align-content-center align-items-center">
                             {{ $post->title }}
+                            @if(!$post->category->status)
+                                <span class="text-warning icon lni lni-warning mx-2 fs-5"
+                                      data-bs-toggle="tooltip"
+                                      data-bs-placement="bottom"
+                                      data-bs-title="This post is disable due to {{ $post->category->name }} category is disabled!">
+                                </span>
+                            @endif
                         </td>
                         <td class="text-center align-content-center">
                             @if($post->draft)
@@ -95,4 +102,11 @@
     <div class="d-flex justify-content-center mt-4">
         {{ $posts->links('pagination::bootstrap-4') }}
     </div>
+@endsection
+
+@section('additional-script')
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
 @endsection

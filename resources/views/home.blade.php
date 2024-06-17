@@ -62,7 +62,7 @@
                             <small class="text-muted text-xs align-content-center">
                                 <span class="icon lni lni-eye mx-1"></span> <b>{{ $post->visit_counts }}</b>
                                 <span class="mx-2"></span>
-                                <span class="icon lni lni-comments mx-1"></span> <b>{{ $post->comments_count  }}</b>
+                                <span class="icon lni lni-comments mx-1"></span> <b>{{ $post->comments_count }}</b>
                             </small>
                             <a href="{{ route('post.view', ['id' => $post->id]) }}" class="stretched-link"></a>
                         </div>

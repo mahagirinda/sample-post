@@ -39,7 +39,7 @@ class UserRequest extends FormRequest
             $rules['password'] = 'required|min:8';
             $rules['password_confirmation'] = 'required|same:password';
         } elseif ($this->isMethod('put')) {
-            $rules['email'] = 'sometimes|email|';
+            $rules['email'] = 'sometimes|email';
             $rules['image'] = 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048';
             $rules['password'] = 'sometimes|nullable|min:8';
             $rules['password_confirmation'] = 'nullable|same:password';

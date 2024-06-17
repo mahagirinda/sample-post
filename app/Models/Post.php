@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @method static orderBy(string $string, string $string1)
- * @method static where(string $string, String $id)
+ * @method static orderBy(string $key, string $value)
+ * @method static where(string $key, String $value)
  * @method static get()
- * @method static paginate(int $int)
+ * @method static paginate(int $perPage)
  * @property mixed|integer $user_id
  * @property mixed|string $title
  * @property mixed|boolean $draft
