@@ -1,16 +1,16 @@
 @extends('layout.app')
 
-@section('title', 'Create')
+@section('title', 'Create Post')
 
 @section('breadcrumb')
     <div class="breadcrumb-wrapper">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('home') }}">Post</a>
+                    <a href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    Create
+                    Create Post
                 </li>
             </ol>
         </nav>
@@ -19,7 +19,9 @@
 
 @section('content')
     <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
+
         @csrf
+
         <div class="mb-3">
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="draft" name="draft">

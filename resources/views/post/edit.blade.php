@@ -1,16 +1,16 @@
 @extends('layout.app')
 
-@section('title', 'Edit')
+@section('title', 'Edit Post')
 
 @section('breadcrumb')
     <div class="breadcrumb-wrapper">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('home') }}">Post</a>
+                    <a href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ route('post.edit.list') }}">Edit</a>
+                    <a href="{{ route('post.edit.list') }}">Edit Post</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
                     {{ $post->title }}
@@ -22,7 +22,9 @@
 
 @section('content')
     <form action="{{ route('post.update', $post->id) }}" method="POST" enctype="multipart/form-data">
+
         @csrf
+
         @method('PUT')
 
         <input type="hidden" name="id" value="{{ old('id', $post->id) }}">

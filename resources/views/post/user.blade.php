@@ -9,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('home') }}">Post</a>
+                    <a href="{{ route('home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
                     My Post
@@ -36,7 +36,7 @@
             <tbody>
             @if($posts->isEmpty())
                 <tr>
-                    <td colspan="7" class="text-center">You don't have post data</td>
+                    <td colspan="7" class="text-center">You don't have any post yet</td>
                 </tr>
             @else
                 @foreach($posts as $post)
