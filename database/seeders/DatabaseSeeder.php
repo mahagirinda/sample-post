@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -60,9 +61,9 @@ class DatabaseSeeder extends Seeder
         }
 
         /**
-         * Initial User Data Seed if not on production
+         * Initial User Data Seed on local development
          */
-        if(!env('APP_ENV') == 'production') {
+        if (env('APP_ENV') == 'local') {
             $users = [
                 [
                     'role' => 'admin',
@@ -81,6 +82,18 @@ class DatabaseSeeder extends Seeder
             foreach ($users as $user) {
                 User::create($user);
             }
+        }
+
+
+        $sourcePath = public_path('images/default.jpg');
+        $destinationPath = public_path('storage/image/user/default.jpg');
+        $destinationDir = dirname($destinationPath);
+        if (!File::exists($destinationDir)) {
+            File::makeDirectory($destinationDir, 0755, true);
+        }
+
+        if (File::exists($sourcePath)) {
+            File::copy($sourcePath, $destinationPath);
         }
     }
 }

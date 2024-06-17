@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,6 +51,19 @@ Route::middleware("role:admin")->group(function () {
             Route::get('edit/{id}', 'edit')->name('post.edit')
                 ->where('id', '[0-9]+');;
             Route::put('update', 'update')->name('post.update');
+        });
+    });
+
+    Route::prefix("user")->group(function () {
+        Route::controller(UserController::class)->group(function () {
+            Route::get('inquiry', 'inquiry')->name('user.inquiry');
+            Route::get('create', 'create')->name('user.create');
+            Route::post('create', 'store')->name('user.store');
+            Route::get('my-profile', 'profile')->name('user.profile');
+            Route::get('edit-list', 'edit_list')->name('user.edit.list');
+            Route::get('edit/{id}', 'edit')->name('user.edit')
+                ->where('id', '[0-9]+');
+            Route::put('update', 'update')->name('user.update');
         });
     });
 });

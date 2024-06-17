@@ -9,9 +9,6 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('home') }}">Post</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">
                     Home
                 </li>
             </ol>
@@ -27,6 +24,12 @@
                     <p class="text-center">
                         No Post Yet
                     </p>
+                    <small class="text-center text-muted my-3">
+                        Hey there! We're looking for awesome people to help us create awesome content. Wanna join the fun?
+                    </small>
+                    <small class="text-center text-muted mb-3">
+                        Share your thoughts, experiences, or expertise by creating a post below. Click the <b>Create Post</b> button to get started and join the conversation!
+                    </small>
                     <a href="{{ route('post.create') }}" class="btn btn-lg btn-primary mt-4"> Create Post</a>
                 </div>
             </div>

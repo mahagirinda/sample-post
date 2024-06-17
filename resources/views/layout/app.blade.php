@@ -84,7 +84,7 @@
                             dropdown-nav">
                         <li>
                             <a href="{{ route('post.inquiry')  }}"
-                               class="{{ Request::routeIs('post.inquiry') ? 'active' : '' }}"> Inquiry </a>
+                               class="{{ request()->routeIs('post.inquiry') ? 'active' : '' }}"> Inquiry </a>
                         </li>
                         <li>
                             <a href="{{ route('post.edit.list')  }}"
@@ -98,20 +98,39 @@
                     </ul>
                 </li>
                 <li class="nav-item nav-item-has-children">
-                    <a href="#" class="collapsed" data-bs-toggle="collapse" data-bs-target="#user_menu"
+                    <a href="#" class="
+                            @if(request()->routeIs(['user.inquiry', 'user.create', 'user.edit.list', 'user.edit']))
+                               collapse
+                            @else
+                               collapsed
+                            @endif"
+                       data-bs-toggle="collapse" data-bs-target="#user_menu"
                        aria-controls="user_menu" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="icon lni lni-users"></span>
                         <span class="text">Users</span>
                     </a>
-                    <ul id="user_menu" class="collapse dropdown-nav">
+                    <ul id="user_menu"
+                        class="collapse
+                            @if(request()->routeIs(['user.inquiry', 'user.create', 'user.edit.list', 'user.edit']))
+                               show
+                            @endif
+                            dropdown-nav">
                         <li>
-                            <a href="#"> Inquiry </a>
+                            <a href="{{ route('user.inquiry')  }}"
+                               class="{{ request()->routeIs('user.inquiry') ? 'active' : '' }}"> Inquiry </a>
                         </li>
                         <li>
-                            <a href="#"> Create </a>
+                            <a href="{{ route('user.create')  }}"
+                               class="{{ request()->routeIs('user.create') ? 'active' : '' }}"> Create </a>
                         </li>
                         <li>
-                            <a href="#"> Update </a>
+                            <a href="{{ route('user.edit.list')  }}"
+                               class="
+                               @if(request()->routeIs(['user.edit.list', 'user.edit']))
+                                   active
+                               @endif">
+                                Update
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -184,7 +203,7 @@
                                 <div class="profile-info">
                                     <div class="info">
                                         <div class="image">
-                                            <img src="{{ url("storage/image/profile/profile-image.png" )}}" alt=""/>
+                                            <img src="{{ url("storage/image/user/default.jpg" )}}" alt=""/>
                                         </div>
                                         <div>
                                             <h6 class="fw-500">Adam Joe</h6>
@@ -197,7 +216,7 @@
                                 <li>
                                     <div class="author-info flex items-center !p-1">
                                         <div class="image">
-                                            <img src="{{ url("storage/image/profile/profile-image.png" )}}" alt="image">
+                                            <img src="{{ url("storage/image/user/default.jpg" )}}" alt="image">
                                         </div>
                                         <div class="content">
                                             <h4 class="text-sm">Adam Joe</h4>

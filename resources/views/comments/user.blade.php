@@ -34,7 +34,7 @@
             <tbody>
             @if($comments->isEmpty())
                 <tr>
-                    <td colspan="5" class="text-center">You don't have any commented post</td>
+                    <td colspan="5" class="text-center">You don't have any comment to a post yet</td>
                 </tr>
             @else
                 @foreach($comments as $comment)
