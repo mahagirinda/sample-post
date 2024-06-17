@@ -45,7 +45,7 @@
                                  alt="{{ "content-image-" . $post->user->name }}" loading="lazy">
                             {{ $post->user->name }}
                             @if($post->user->role == 'admin')
-                                &nbsp;<span class="badge bg-info">Admin</span>
+                                &nbsp;<span class="badge bg-info ml-5">Admin</span>
                             @endif
                         </div>
                         <small class="text-muted text-xs">{{ Carbon::parse($post->created_at)->format('d F Y - H:i') }}</small>
@@ -120,4 +120,11 @@
             @endif
         </div>
     </div>
+@endsection
+
+@section('additional-script')
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
 @endsection

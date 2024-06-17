@@ -3,27 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CommentRequest;
-use App\Models\Comment;
+use App\Services\CommentService;
+use App\Services\CommonService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 
 class CommentController extends Controller
 {
+    private CommentService $commentService;
+    private CommonService $commonService;
+
+    public function __construct(CommentService $commentService, CommonService $commonService)
+    {
+        $this->commentService = $commentService;
+        $this->commonService = $commonService;
+    }
+
     public function store(CommentRequest $request): RedirectResponse
     {
-        $comment = new Comment();
         try {
-            //$comment->user_id = Auth::user()->id;
-            $comment->user_id = 1;
-            $comment->post_id = $request->post_id;
-            $comment->comment = $request->comment;
-            $comment->save();
+            $this->commentService->save($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->back()->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->back()->with('error', $errorMessage);
         }
 
         return redirect()->back()->with('success', 'Comment saved successfully!');
@@ -31,41 +35,36 @@ class CommentController extends Controller
 
     function user(): View
     {
-        // $id = Auth::user()->id;
-        $id = '1';
-        $comments = Comment::where('user_id', $id)->paginate(10);
+        $id = '1'; // Auth::user()->id;
+        $comments = $this->commentService->getCommentById($id);
         return view('comments.user', compact('comments'));
     }
 
     function edit_list(): View
     {
-        $comments = Comment::paginate(10);
+        $comments = $this->commentService->getCommentById(10);
         return view('comments.edit-list', compact('comments'));
     }
 
     function edit($id): View
     {
-        $comment = Comment::where('id', $id)->first();
+        $comment = $this->commentService->getCommentById($id);
         return view('comments.edit', compact('comment'));
     }
 
     function user_edit($id): View
     {
-        $comment = Comment::where('id', $id)->first();
+        $comment = $this->commentService->getCommentById($id);
         return view('comments.user-edit', compact('comment'));
     }
 
     public function update(CommentRequest $request): RedirectResponse
     {
-        $comment = Comment::where('id', $request->id)->first();
         try {
-            $comment->comment = $request->comment;
-            $comment->save();
+            $comment = $this->commentService->update($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('comment.edit', ['id' => $comment->id])
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('comment.edit', ['id' => $request->id])->with('error', $errorMessage);
         }
 
         $parameter = ['id' => $comment->id];
@@ -74,15 +73,11 @@ class CommentController extends Controller
 
     public function user_update(CommentRequest $request): RedirectResponse
     {
-        $comment = Comment::where('id', $request->id)->first();
         try {
-            $comment->comment = $request->comment;
-            $comment->save();
+            $comment = $this->commentService->update($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('comment.edit', ['id' => $comment->id])
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('comment.edit', ['id' => $request->id])->with('error', $errorMessage);
         }
 
         $parameter = ['id' => $comment->id];
@@ -91,7 +86,7 @@ class CommentController extends Controller
 
     function inquiry(): View
     {
-        $comments = Comment::paginate(20);
+        $comments = $this->commentService->getComments(20);
         return view('comments.inquiry', compact('comments'));
     }
 }

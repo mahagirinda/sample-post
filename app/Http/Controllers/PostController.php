@@ -3,73 +3,72 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
-use App\Models\Category;
-use App\Models\Comment;
-use App\Models\Post;
-use App\Models\User;
+use App\Services\CategoryService;
+use App\Services\CommentService;
+use App\Services\CommonService;
+use App\Services\PostService;
+use App\Services\UserService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
+    private PostService $postService;
+    private UserService $userService;
+    private CommentService $commentService;
+    private CategoryService $categoryService;
+    private CommonService $commonService;
+
+    public function __construct(CategoryService $categoryService,
+                                PostService     $postService, UserService $userService,
+                                CommentService  $commentService, CommonService $commonService)
+    {
+        $this->postService = $postService;
+        $this->userService = $userService;
+        $this->commentService = $commentService;
+        $this->categoryService = $categoryService;
+        $this->commonService = $commonService;
+    }
+
     function dashboard(): View
     {
-        $dashboard = (object) array();
-        $dashboard->post = Post::count();
-        $dashboard->user = User::count();
-        $dashboard->comment = Comment::count();
+        $dashboard = (object)array();
+        $dashboard->post = $this->postService->countPost();
+        $dashboard->user = $this->userService->countUsers();
+        $dashboard->comment = $this->commentService->countComments();
 
-        $posts = Post::where('draft', 0)
-            ->whereHas('category', function ($query) {
-                $query->where('status', 1);
-            })
-            ->withCount('comments')
-            ->orderBy('created_at', 'desc')
-            ->limit(3)->paginate(3);
+        $posts = $this->postService->getActivePostByWithLimit(3);
+        $comments = $this->commentService->getCommentsWithLimit(4);
 
-        $comments = Comment::orderBy('created_at', 'desc')
-            ->limit(3)->paginate(3);
-
-        return view('dashboard', compact('dashboard','posts', 'comments'));
+        return view('dashboard', compact('dashboard', 'posts', 'comments'));
     }
 
     function home(): View
     {
-        $posts = Post::where('draft', 0)
-            ->whereHas('category', function ($query) {
-                $query->where('status', 1);
-            })
-            ->withCount('comments')
-            ->orderBy('created_at', 'desc')
-            ->paginate(6);
-
+        $posts = $this->postService->getPostForHomePage();
         return view('home', compact('posts'));
     }
 
     function create(): View
     {
-        $categories = Category::where('status', 1)->orderBy('name', 'asc')->get();
+        $categories = $this->categoryService->getActiveCategories();
         return view('post.create', compact('categories'));
     }
 
     function user(): View
     {
-        // $id = Auth::user()->id;
-        $id = '1';
-        $posts = Post::where('user_id', $id)->paginate(10);
+        $id = '1'; // Auth::user()->id;
+        $posts = $this->postService->getPostByUserId($id, 10);
         return view('post.user', compact('posts'));
     }
 
     function view(string $id): View|RedirectResponse
     {
-        $post = Post::where('id', $id)->firstOrFail();
+        $post = $this->postService->getPostById($id);
         if (!$post->draft) {
-            $post->timestamps = false;
-            $post->visit_counts = $post->visit_counts + 1;
-            $post->save();
+            $this->postService->countViewPost($id);
             return view('post.view', compact('post'));
         } else {
             return redirect()->back()->with("error", "Post on draft cannot be viewed!.");
@@ -79,24 +78,10 @@ class PostController extends Controller
     public function store(PostRequest $request): RedirectResponse
     {
         try {
-            $post = new Post();
-            $post->title = $request->title;
-            $post->draft = $request->draft === "on";
-            // $post->user_id = Auth::user()->id;
-            $post->user_id = 1;
-            if ($request->hasFile('image')) {
-                $imageName = time() . '.' . request()->image->getClientOriginalExtension();
-                $request->file('image')->storeAs('image/post', $imageName, 'public');
-                $post->image = $imageName;
-            }
-            $post->category_id = $request->category_id;
-            $post->contents = $request->post_content;
-            $post->save();
+            $this->postService->save($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('post.create')
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('post.create')->with('error', $errorMessage);
         }
 
         return redirect()->route('post.create')->with('success', 'Post saved successfully!');
@@ -104,52 +89,31 @@ class PostController extends Controller
 
     function edit_list(): View
     {
-        $posts = Post::paginate(10);
+        $posts = $this->postService->getAllPost(10);
         return view('post.edit-list', compact('posts'));
     }
 
     function edit($id): View
     {
-        $post = Post::where('id', $id)->first();
-        $categories = Category::where('status', 1)->orderBy('name', 'asc')->get();
+        $post = $this->postService->getPostById($id);
+        $categories = $this->categoryService->getActiveCategories();
         return view('post.edit', compact('post', 'categories'));
     }
 
     function user_edit($id): View
     {
-        $post = Post::where('id', $id)->first();
-        $categories = Category::where('status', 1)->orderBy('name', 'asc')->get();
+        $post = $this->postService->getPostById($id);
+        $categories = $this->categoryService->getActiveCategories();
         return view('post.user-edit', compact('post', 'categories'));
     }
 
     public function update(PostRequest $request): RedirectResponse
     {
-        $post = Post::where('id', $request->id)->first();
         try {
-            if ($this->checkUpdateDraftOnly($post, $request)) {
-                $post->timestamps = false;
-            }
-
-            $post->title = $request->title;
-            $post->draft = $request->draft === "on";
-            // $post->user_id = Auth::user()->id;
-            $post->user_id = 1;
-            if ($request->hasFile('image')) {
-                if (Storage::disk('public')->exists('image/post/' . $post->image)) {
-                    Storage::disk('public')->delete('image/post/' . $post->image);
-                }
-                $imageName = time() . '.' . request()->image->getClientOriginalExtension();
-                $request->file('image')->storeAs('image/post', $imageName, 'public');
-                $post->image = $imageName;
-            }
-            $post->category_id = $request->category_id;
-            $post->contents = $request->post_content;
-            $post->save();
+            $post = $this->postService->update($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('post.edit', ['id' => $post->id])
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('post.edit', ['id' => $request->id])->with($errorMessage);
         }
 
         $parameter = ['id' => $post->id];
@@ -158,32 +122,11 @@ class PostController extends Controller
 
     public function user_update(PostRequest $request): RedirectResponse
     {
-        $post = Post::where('id', $request->id)->first();
         try {
-            if ($this->checkUpdateDraftOnly($post, $request)) {
-                $post->timestamps = false;
-            }
-
-            $post->title = $request->title;
-            $post->draft = $request->draft === "on";
-            // $post->user_id = Auth::user()->id;
-            $post->user_id = 1;
-            if ($request->hasFile('image')) {
-                if (Storage::disk('public')->exists('image/post/' . $post->image)) {
-                    Storage::disk('public')->delete('image/post/' . $post->image);
-                }
-                $imageName = time() . '.' . request()->image->getClientOriginalExtension();
-                $request->file('image')->storeAs('image/post', $imageName, 'public');
-                $post->image = $imageName;
-            }
-            $post->category_id = $request->category_id;
-            $post->contents = $request->post_content;
-            $post->save();
+            $post = $this->postService->update($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('post.edit', ['id' => $post->id])
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('post.edit', ['id' => $request->id])->with($errorMessage);
         }
 
         $parameter = ['id' => $post->id];
@@ -192,18 +135,8 @@ class PostController extends Controller
 
     function inquiry(): View
     {
-        $posts = Post::paginate(10);
+        $posts = $this->postService->getAllPost(20);
         return view('post.inquiry', compact('posts'));
     }
 
-    function checkUpdateDraftOnly(Post $post, PostRequest $updatedRequest): bool
-    {
-        if ($post->draft == "on" && $updatedRequest->draft) {
-            return true;
-        }
-        if ($post->draft == "off" && !$updatedRequest->draft) {
-            return true;
-        }
-        return false;
-    }
 }

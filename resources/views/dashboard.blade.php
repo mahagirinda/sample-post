@@ -46,7 +46,7 @@
     </div>
 
     <h2 class="mb-3 mt-5">Recent Comments</h2>
-    <div class="row row-cols-md-3 gy-md-4 row-cols-1 gy-3">
+    <div class="row row-cols-md-4 gy-md-4 row-cols-1 gy-3">
         @if ($comments->isEmpty())
             <div class="col-md-12">
                 <div class="card p-5">

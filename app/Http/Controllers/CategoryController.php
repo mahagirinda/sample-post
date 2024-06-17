@@ -3,14 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
-use App\Models\Category;
+use App\Services\CategoryService;
+use App\Services\CommonService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
+    private CategoryService $categoryService;
+    private CommonService $commonService;
+
+    public function __construct(CategoryService $categoryService, CommonService $commonService)
+    {
+        $this->categoryService = $categoryService;
+        $this->commonService = $commonService;
+    }
+
     function create(): View
     {
         return view('category.create');
@@ -18,23 +28,17 @@ class CategoryController extends Controller
 
     function view(string $id): View|RedirectResponse
     {
-        $category = Category::where('id', $id)->with('posts')->first();
+        $category = $this->categoryService->getCategoryById($id);
         return view('category.view', compact('category'));
     }
 
     function store(CategoryRequest $request): RedirectResponse
     {
         try {
-            $category = new Category();
-            $category->name = $request->name;
-            $category->detail = $request->detail;
-            $category->status = $request->status === "on";
-            $category->save();
+            $this->categoryService->save($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('category.create')
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('category.create')->with('error', $errorMessage);
         }
 
         return redirect()->route('category.create')->with('success', 'Category saved successfully!');
@@ -42,29 +46,23 @@ class CategoryController extends Controller
 
     function edit_list(): View
     {
-        $categories = Category::withCount('posts')->paginate(10);
+        $categories = $this->categoryService->getCategoryWithPage(10);
         return view('category.edit-list', compact('categories'));
     }
 
     function edit($id): View
     {
-        $category = Category::where('id', $id)->first();
+        $category = $this->categoryService->getCategoryById($id);
         return view('category.edit', compact('category'));
     }
 
     public function update(CategoryRequest $request): RedirectResponse
     {
-        $category = Category::where('id', $request->id)->first();
         try {
-            $category->name = $request->name;
-            $category->detail = $request->detail;
-            $category->status = $request->status === "on";
-            $category->save();
+            $category = $this->categoryService->update($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('category.edit', ['id' => $category->id])
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('category.edit', ['id' => $request->id])->with('error', $errorMessage);
         }
 
         $parameter = ['id' => $category->id];
@@ -73,7 +71,7 @@ class CategoryController extends Controller
 
     function inquiry(): View
     {
-        $categories = Category::withCount('posts')->paginate(20);
+        $categories = $this->categoryService->getCategoryWithPage(20);
         return view('category.inquiry', compact('categories'));
     }
 }

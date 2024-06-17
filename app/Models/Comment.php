@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static where(string $string, string $id)
  * @method static paginate(int $int)
  * @method static orderBy(string $string, string $string1)
+ * @method static count()
  */
 class Comment extends Model
 {

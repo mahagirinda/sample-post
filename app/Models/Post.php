@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static where(string $key, String $value)
  * @method static get()
  * @method static paginate(int $perPage)
+ * @method static count()
  * @property mixed|integer $user_id
  * @property mixed|string $title
  * @property mixed|boolean $draft

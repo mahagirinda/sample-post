@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create(array $data)
  * @method static where(string $string, string $id)
  * @method static paginate(int $int)
+ * @method static count()
  * @property mixed $name
  * @property mixed $email
  * @property mixed|string $image

@@ -3,16 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
-use App\Models\User;
+use App\Services\CommonService;
+use App\Services\UserService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Routing\Controller;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
+    private UserService $userService;
+    private CommonService $commonService;
+
+    public function __construct(UserService $userService, CommonService $commonService)
+    {
+        $this->userService = $userService;
+        $this->commonService = $commonService;
+    }
+
     function create(): View
     {
         return view('user.create');
@@ -20,31 +28,18 @@ class UserController extends Controller
 
     function profile(): View
     {
-        // $id = Auth::user()->id;
-        $id = '1';
-        $user = User::where('id', $id)->get();
+        $id = '1'; //Auth::user()->id;
+        $user = $this->userService->getUserById($id);
         return view('user.view', compact('user'));
     }
 
     function store(UserRequest $request): RedirectResponse
     {
         try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->role = 'user';
-            if ($request->hasFile('image')) {
-                $imageName = time() . '.' . request()->image->getClientOriginalExtension();
-                $request->file('image')->storeAs('image/user', $imageName, 'public');
-                $user->image = $imageName;
-            }
-            $user->password = Hash::make($request->input('password'));
-            $user->save();
+            $this->userService->save($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('user.create')
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('user.create')->with('error', $errorMessage);
         }
 
         return redirect()->route('user.create')->with('success', 'User created successfully!');
@@ -52,39 +47,23 @@ class UserController extends Controller
 
     function edit_list(): View
     {
-        $users = User::paginate(10);
+        $users = $this->userService->getUsers(10);
         return view('user.edit-list', compact('users'));
     }
 
     function edit($id): View
     {
-        $user = User::where('id', $id)->first();
+        $user = $this->userService->getUserById($id);
         return view('user.edit', compact('user'));
     }
 
     public function update(UserRequest $request): RedirectResponse
     {
-        $user = User::where('id', $request->id)->first();
         try {
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->role = $request->role;
-            if ($request->hasFile('image') && $request->file('image')->isValid()) {
-                if (Storage::disk('public')->exists('image/user/' . $user->image)) {
-                    if ($user->image != 'default.png') {
-                        Storage::disk('public')->delete('image/user/' . $user->image);
-                    }
-                }
-                $imageName = time() . '.' . request()->image->getClientOriginalExtension();
-                $request->file('image')->storeAs('image/user', $imageName, 'public');
-                $user->image = $imageName;
-            }
-            $user->save();
+            $user = $this->userService->update($request);
         } catch (Exception $e) {
-            Log::channel('log-error')->error($e->getMessage());
-            return redirect()
-                ->route('user.edit', ['id' => $user->id])
-                ->with('error', "Error : " . $e->getMessage());
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('user.edit', ['id' => $request->id])->with('error', $errorMessage);
         }
 
         $parameter = ['id' => $user->id];
@@ -93,7 +72,7 @@ class UserController extends Controller
 
     function inquiry(): View
     {
-        $users = User::paginate(10);
+        $users = $this->userService->getUsers(20);
         return view('user.inquiry', compact('users'));
     }
 }
