@@ -48,7 +48,7 @@ class UserService
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             if (Storage::disk('public')->exists('image/user/' . $user->image)) {
                 if ($user->image != 'default.png') {
-                    Storage::disk('public')->delete('image/user/' . $user->image);
+                    Storage::disk('public')->delete('image/user/' . $request->image);
                 }
             }
             $imageName = time() . '.' . request()->image->getClientOriginalExtension();

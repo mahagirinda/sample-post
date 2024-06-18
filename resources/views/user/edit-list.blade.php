@@ -40,12 +40,17 @@
                 @foreach($users as $user)
                     <tr>
                         <td class="align-content-center d-flex align-items-center">
-                            <img src="{{ url('storage/image/user/' . $user->image) }}" class="image-profile-md ml-15 mr-25"
+                            <img src="{{ url('storage/image/user/' . $user->image) }}"
+                                 class="image-profile-md ml-15 mr-25"
                                  alt="{{ "content-image-" . $user->name }}" loading="lazy">
                             {{ $user->name }}
                         </td>
                         <td class="align-content-center">
-                            {{ $user->role }}
+                            @if($user->role == 'admin')
+                                <span class="badge bg-info">Admin</span>
+                            @else
+                                <span class="badge bg-secondary">User</span>
+                            @endif
                         </td>
                         <td class="align-content-center">
                             {{ $user->email }}

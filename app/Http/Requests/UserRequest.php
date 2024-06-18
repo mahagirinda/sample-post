@@ -10,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * @property mixed $name
  * @property mixed $email
  * @property mixed $role
+ * @property mixed $image
  */
 class UserRequest extends FormRequest
 {

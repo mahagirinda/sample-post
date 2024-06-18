@@ -104,7 +104,7 @@
                                         @if($comment->created_at != $comment->updated_at)
                                             &nbsp;<span class="badge bg-secondary ml-5">Edited</span>
                                         @endif
-                                        @if($post->user->role == 'admin')
+                                        @if($comment->user->role == 'admin')
                                             &nbsp;<span class="badge bg-info ml-5">Admin</span>
                                         @endif
                                     </div>

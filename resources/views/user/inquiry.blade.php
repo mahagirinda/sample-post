@@ -45,7 +45,11 @@
                             {{ $user->name }}
                         </td>
                         <td class="align-content-center">
-                            {{ $user->role }}
+                            @if($user->role == 'admin')
+                                <span class="badge bg-info">Admin</span>
+                            @else
+                                <span class="badge bg-secondary">User</span>
+                            @endif
                         </td>
                         <td class="align-content-center">
                             {{ $user->email }}
