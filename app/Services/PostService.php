@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PostService
@@ -55,7 +56,7 @@ class PostService
         $post = new Post();
         $post->title = $request->title;
         $post->draft = $request->draft === "on";
-        $post->user_id = 1; // Auth::user()->id
+        $post->user_id = Auth::user()->id;
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . request()->image->getClientOriginalExtension();
             $request->file('image')->storeAs('image/post', $imageName, 'public');
@@ -75,8 +76,7 @@ class PostService
 
         $post->title = $request->title;
         $post->draft = $request->draft === "on";
-        // $post->user_id = Auth::user()->id;
-        $post->user_id = 1;
+        $post->user_id = Auth::user()->id;
         if ($request->hasFile('image')) {
             if (Storage::disk('public')->exists('image/post/' . $post->image)) {
                 Storage::disk('public')->delete('image/post/' . $post->image);

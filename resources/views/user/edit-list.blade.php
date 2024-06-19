@@ -1,4 +1,7 @@
-@php use Carbon\Carbon; @endphp
+@php
+    use Carbon\Carbon;
+    use Illuminate\Support\Facades\Auth;
+@endphp
 
 @extends('layout.app')
 
@@ -59,7 +62,11 @@
                             {{ Carbon::parse($user->created_at)->format('d F Y - H:i') }}
                         </td>
                         <td class="text-center align-content-center">
-                            <a href="{{ route('user.edit', $user->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                            @if(Auth::user()->id == $user->id)
+                                <a href="#" class="btn btn-primary btn-sm disabled">Edit</a>
+                            @else
+                                <a href="{{ route('user.edit', $user->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

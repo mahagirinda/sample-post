@@ -11,6 +11,7 @@ use App\Services\UserService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -59,7 +60,7 @@ class PostController extends Controller
 
     function user(): View
     {
-        $id = '1'; // Auth::user()->id;
+        $id = Auth::user()->id;
         $posts = $this->postService->getPostByUserId($id, 10);
         return view('post.user', compact('posts'));
     }
@@ -100,10 +101,13 @@ class PostController extends Controller
         return view('post.edit', compact('post', 'categories'));
     }
 
-    function user_edit($id): View
+    function user_edit($id): View|RedirectResponse
     {
         $post = $this->postService->getPostById($id);
         $categories = $this->categoryService->getActiveCategories();
+        if (Auth::user()->id != $post->user_id) {
+            return redirect()->back()->with('error', 'You cannot edit other users post!');
+        }
         return view('post.user-edit', compact('post', 'categories'));
     }
 
@@ -124,6 +128,9 @@ class PostController extends Controller
     {
         try {
             $post = $this->postService->update($request);
+            if (Auth::user()->id != $post->user_id) {
+                return redirect()->back()->with('error', 'You cannot edit other users post!');
+            }
         } catch (Exception $e) {
             $errorMessage = $this->commonService->writeErrorLog($e);
             return redirect()->route('post.edit', ['id' => $request->id])->with($errorMessage);

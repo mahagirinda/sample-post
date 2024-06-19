@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+@php use Illuminate\Support\Facades\Auth; @endphp
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -235,12 +236,12 @@
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="profile-info">
                                     <div class="info">
-                                        <div class="image">
-                                            <img src="{{ url("storage/image/user/default.jpg" )}}" alt=""/>
+                                        <div class="image image-wrapper">
+                                            <img src="{{ url("storage/image/user/" . Auth::user()->image )}}" class="image-profile-md" alt=""/>
                                         </div>
                                         <div>
-                                            <h6 class="fw-500">Adam Joe</h6>
-                                            <p>Admin</p>
+                                            <h6 class="fw-500">{{ Auth::user()->name }}</h6>
+                                            <p>{{ Auth::user()->role }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -249,12 +250,12 @@
                                 <li>
                                     <div class="author-info flex items-center !p-1">
                                         <div class="image">
-                                            <img src="{{ url("storage/image/user/default.jpg" )}}" alt="image">
+                                            <img src="{{ url("storage/image/user/" . Auth::user()->image )}}" alt="image">
                                         </div>
                                         <div class="content">
-                                            <h4 class="text-sm">Adam Joe</h4>
+                                            <h4 class="text-sm">{{ Auth::user()->name }}</h4>
                                             <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs"
-                                               href="#">Email@gmail.com</a>
+                                               href="#">{{ Auth::user()->email }}</a>
                                         </div>
                                     </div>
                                 </li>
@@ -266,8 +267,13 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="#"> <i class="lni lni-exit"></i> Sign Out </a>
+                                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="lni lni-exit"></i> Log Out
+                                    </a>
                                 </li>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                             </ul>
                         </div>
                     </div>
@@ -331,7 +337,7 @@
                 <div class="col-md-6">
                     <div class="terms d-flex justify-content-center justify-content-md-end">
                         <span class="text-sm">Pemrograman Web II</span>
-                        <a href="https://pnb.ac.id/" class="text-sm ml-15">Politeknik Negeri Bali</a>
+                        <a href="https://pnb.ac.id/" target="_blank" class="text-sm ml-15">Politeknik Negeri Bali</a>
                     </div>
                 </div>
             </div>

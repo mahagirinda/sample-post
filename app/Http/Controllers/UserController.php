@@ -8,6 +8,7 @@ use App\Services\UserService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -28,7 +29,7 @@ class UserController extends Controller
 
     function profile(): View
     {
-        $id = '1'; //Auth::user()->id;
+        $id = Auth::user()->id;
         $user = $this->userService->getUserById($id);
         return view('user.view', compact('user'));
     }
@@ -51,9 +52,12 @@ class UserController extends Controller
         return view('user.edit-list', compact('users'));
     }
 
-    function edit($id): View
+    function edit($id): View | RedirectResponse
     {
         $user = $this->userService->getUserById($id);
+        if (Auth::user()->id == $user->id) {
+            return redirect()->route('home')->with('error', 'You cannot edit yourself from this menu!');
+        }
         return view('user.edit', compact('user'));
     }
 

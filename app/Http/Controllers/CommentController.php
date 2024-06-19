@@ -8,6 +8,7 @@ use App\Services\CommonService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class CommentController extends Controller
@@ -35,7 +36,7 @@ class CommentController extends Controller
 
     function user(): View
     {
-        $id = '1'; // Auth::user()->id;
+        $id = Auth::user()->id;
         $comments = $this->commentService->getCommentsByUserId($id, 10);
         return view('comments.user', compact('comments'));
     }
@@ -52,9 +53,12 @@ class CommentController extends Controller
         return view('comments.edit', compact('comment'));
     }
 
-    function user_edit($id): View
+    function user_edit($id): View | RedirectResponse
     {
         $comment = $this->commentService->getCommentById($id);
+        if (Auth::user()->id != $comment->user_id) {
+            return redirect()->back()->with('error', 'You cannot edit other users comment!');
+        }
         return view('comments.user-edit', compact('comment'));
     }
 
@@ -75,6 +79,9 @@ class CommentController extends Controller
     {
         try {
             $comment = $this->commentService->update($request);
+            if (Auth::user()->id != $comment->user_id) {
+                return redirect()->back()->with('error', 'You cannot edit other users comment!');
+            }
         } catch (Exception $e) {
             $errorMessage = $this->commonService->writeErrorLog($e);
             return redirect()->route('comment.edit', ['id' => $request->id])->with('error', $errorMessage);

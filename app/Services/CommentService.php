@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class CommentService
 {
@@ -35,7 +36,7 @@ class CommentService
     public function save(CommentRequest $request): void
     {
         $comment = new Comment();
-        $comment->user_id = 1; // Auth::user()->id
+        $comment->user_id = Auth::user()->id;
         $comment->post_id = $request->post_id;
         $comment->comment = $request->comment;
         $comment->save();

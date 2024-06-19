@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticate;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @method static create(array $data)
@@ -16,9 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed|string $password
  * @property mixed|string $role
  */
-class User extends Model
+class User extends Authenticate
 {
     use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -27,8 +29,8 @@ class User extends Model
      */
     protected $fillable = [
         'name',
-        'image',
         'email',
+        'password',
     ];
 
     /**
