@@ -32,7 +32,7 @@ Route::middleware("role:all")->group(function () {
             Route::get('user', 'user')->name('post.user');
             Route::get('user-edit/{id}', 'user_edit')->name('post.user.edit');
             Route::put('user-update', 'user_update')->name('post.user.update');
-            Route::get('view/{id}', 'view')->name('post.view');
+            Route::get('view/{id}', 'view')->name('post.view')->middleware("throttle:10,1");
         });
     });
 
