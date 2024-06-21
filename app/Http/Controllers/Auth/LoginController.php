@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\CommonService;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -49,6 +50,17 @@ class LoginController extends Controller
         $this->commonService = $commonService;
     }
 
+    /**
+     * Handle tasks after user authentication.
+     *
+     * This method is called after the user is authenticated. It logs out other devices
+     * using the provided password and writes a log entry indicating that the user has logged in.
+     * This method overrides the `authenticated` method in `\Illuminate\Foundation\Auth\AuthenticatesUsers`.
+     *
+     * @param Request $request The incoming request instance.
+     * @param User $user The authenticated user instance.
+     * @return void
+     */
     protected function authenticated(Request $request, $user): void
     {
         Auth::logoutOtherDevices($request->password);

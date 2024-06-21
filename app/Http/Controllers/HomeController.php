@@ -21,6 +21,15 @@ class HomeController extends Controller
         $this->commentService = $commentService;
     }
 
+    /**
+     * Display the dashboard view with summary data.
+     *
+     * This method retrieves summary counts for posts, users, and comments from their respective services.
+     * It also fetches a limited number of active posts and comments for display on the dashboard.
+     * The method then returns the 'dashboard' view with the retrieved data.
+     *
+     * @return View The view displaying the dashboard with summary data and limited posts and comments.
+     */
     function dashboard(): View
     {
         $dashboard = (object)array();
@@ -34,6 +43,14 @@ class HomeController extends Controller
         return view('dashboard', compact('dashboard', 'posts', 'comments'));
     }
 
+    /**
+     * Display the home page view with posts.
+     *
+     * This method retrieves posts intended for display on the home page from the post service.
+     * It then returns the 'home' view with the retrieved posts.
+     *
+     * @return View The view displaying the home page with posts.
+     */
     function home(): View
     {
         $posts = $this->postService->getPostForHomePage();

@@ -7,7 +7,11 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
 /**
- * Main Controller For Authenticate
+ * Main Controller For Authentication.
+ *
+ * This controller handles the authorization and validation logic for the application.
+ * It uses the AuthorizesRequests and ValidatesRequests traits to provide functionality
+ * for authorizing actions and validating requests.
  */
 class Controller extends BaseController
 {
