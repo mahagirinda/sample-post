@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Services\CategoryService;
-use App\Services\CommentService;
 use App\Services\CommonService;
 use App\Services\PostService;
-use App\Services\UserService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
@@ -17,39 +15,15 @@ use Illuminate\View\View;
 class PostController extends Controller
 {
     private PostService $postService;
-    private UserService $userService;
-    private CommentService $commentService;
     private CategoryService $categoryService;
     private CommonService $commonService;
 
     public function __construct(CategoryService $categoryService,
-                                PostService     $postService, UserService $userService,
-                                CommentService  $commentService, CommonService $commonService)
+                                PostService $postService, CommonService $commonService)
     {
         $this->postService = $postService;
-        $this->userService = $userService;
-        $this->commentService = $commentService;
         $this->categoryService = $categoryService;
         $this->commonService = $commonService;
-    }
-
-    function dashboard(): View
-    {
-        $dashboard = (object)array();
-        $dashboard->post = $this->postService->countPost();
-        $dashboard->user = $this->userService->countUsers();
-        $dashboard->comment = $this->commentService->countComments();
-
-        $posts = $this->postService->getActivePostByWithLimit(3);
-        $comments = $this->commentService->getCommentsWithLimit(4);
-
-        return view('dashboard', compact('dashboard', 'posts', 'comments'));
-    }
-
-    function home(): View
-    {
-        $posts = $this->postService->getPostForHomePage();
-        return view('home', compact('posts'));
     }
 
     function create(): View

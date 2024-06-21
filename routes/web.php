@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ Route::get('/', function () {
 });
 
 Route::middleware("role:all")->group(function () {
-    Route::get("home", [PostController::class, 'home'])->name('home');
+    Route::get("home", [HomeController::class, 'home'])->name('home');
     Route::prefix("post")->group(function () {
         Route::controller(PostController::class)->group(function () {
             Route::get('create', 'create')->name('post.create');
@@ -48,7 +49,7 @@ Route::middleware("role:all")->group(function () {
 });
 
 Route::middleware("role:admin")->group(function () {
-    Route::get("dashboard", [PostController::class, 'dashboard'])->name('dashboard');
+    Route::get("dashboard", [HomeController::class, 'dashboard'])->name('dashboard');
     Route::prefix("post")->group(function () {
         Route::controller(PostController::class)->group(function () {
             Route::get('inquiry', 'inquiry')->name('post.inquiry');
