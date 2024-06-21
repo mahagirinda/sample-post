@@ -27,11 +27,29 @@ class UserController extends Controller
         return view('user.create');
     }
 
+    function user($id): View
+    {
+        $user = $this->userService->getUserProfileById($id);
+        return view('user.view', compact('user'));
+    }
+
     function profile(): View
     {
         $id = Auth::user()->id;
-        $user = $this->userService->getUserById($id);
-        return view('user.view', compact('user'));
+        $user = $this->userService->getUserProfileById($id);
+        return view('user.profile', compact('user'));
+    }
+
+    public function profile_update (UserRequest $request): RedirectResponse
+    {
+        try {
+            $this->userService->update($request);
+        } catch (Exception $e) {
+            $errorMessage = $this->commonService->writeErrorLog($e);
+            return redirect()->route('user.profile')->with('error', $errorMessage);
+        }
+
+        return redirect()->route('user.profile')->with('success', 'User updated successfully!');
     }
 
     function store(UserRequest $request): RedirectResponse

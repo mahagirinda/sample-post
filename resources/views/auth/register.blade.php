@@ -118,7 +118,7 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
-                                            <label>{{ __('Confirm Password') }}</label>
+                                            <label>Confirm Password</label>
                                             <input id="password-confirm" type="password" class="form-control"
                                                    name="password_confirmation" required autocomplete="new-password">
                                         </div>

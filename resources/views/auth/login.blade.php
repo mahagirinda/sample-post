@@ -75,7 +75,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="input-style-1">
-                                            <label>{{ __('Email Address') }}</label>
+                                            <label>Email Address</label>
                                             <input class="form-control @error('email') is-invalid @enderror"
                                                    type="email"
                                                    placeholder="Email" name="email"/>
@@ -89,7 +89,7 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="input-style-1">
-                                            <label>{{ __('Password') }}</label>
+                                            <label>Password</label>
                                             <input type="password"
                                                    class="form-control @error('password') is-invalid @enderror"
                                                    placeholder="Password" name="password" required
@@ -106,7 +106,7 @@
                                             <input class="form-check-input" type="checkbox" name="remember"
                                                    id="remember" {{ old('remember') ? 'checked' : '' }}>
                                             <label class="form-check-label"
-                                                   for="remember">{{ __('Remember Me') }}</label>
+                                                   for="remember">Remember Me</label>
                                         </div>
                                     </div>
                                     <div class="col-xxl-6 col-lg-12 col-md-6">

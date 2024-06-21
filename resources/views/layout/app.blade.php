@@ -26,7 +26,7 @@
     </div>
     <nav class="sidebar-nav">
         <ul>
-            <li class="nav-item {{ Request::routeIs('home', 'post.view') ? 'active' : '' }}">
+            <li class="nav-item {{ Request::routeIs('home', 'post.view', 'user.profile', 'user.view') ? 'active' : '' }}">
                 <a href="{{ route('home') }}" aria-expanded="false">
                     <span class="icon lni lni-home"></span>
                     <span class="text">Home</span>
@@ -236,7 +236,7 @@
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="profile-info">
                                     <div class="info">
-                                        <div class="image image-wrapper">
+                                        <div class="image image-profile-md-wrapper">
                                             <img src="{{ url("storage/image/user/" . Auth::user()->image )}}" class="image-profile-md" alt=""/>
                                         </div>
                                         <div>
@@ -261,7 +261,7 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="#">
+                                    <a href="{{ route('user.profile') }}">
                                         <i class="lni lni-user"></i> View Profile
                                     </a>
                                 </li>
@@ -319,6 +319,8 @@
     </section>
 
     @include('layout.modal')
+
+    @yield('additional-modal')
 
     <footer class="footer">
         <div class="container-fluid">

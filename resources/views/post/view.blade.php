@@ -40,9 +40,11 @@
                             </span>
                         </h4>
                         <div class="align-content-center d-flex align-items-center text-muted text-xs my-3 mt-4">
-                            <img src="{{ url('storage/image/user/' . $post->user->image) }}"
-                                 class="image-profile-sm mr-10"
-                                 alt="{{ "content-image-" . $post->user->name }}" loading="lazy">
+                            <a class="image-profile-sm-wrapper mr-10" href="{{ route('user.view', ['id' => $post->user->id]) }}">
+                                <img src="{{ url('storage/image/user/' . $post->user->image) }}"
+                                     class="image-profile-sm"
+                                     alt="{{ "content-image-" . $post->user->name }}" loading="lazy">
+                            </a>
                             {{ $post->user->name }}
                             @if($post->user->role == 'admin')
                                 &nbsp;<span class="badge bg-info ml-5">Admin</span>
@@ -107,6 +109,7 @@
                                         @if($comment->user->role == 'admin')
                                             &nbsp;<span class="badge bg-info ml-5">Admin</span>
                                         @endif
+                                        <a href="{{ route('user.view', ['id' => $comment->user->id]) }}" class="stretched-link"></a>
                                     </div>
                                 </div>
                                 <h6 class="card-subtitle mb-2 text-xs">{{ Carbon::parse($comment->created_at)->format('d F Y - H:i') }}</h6>

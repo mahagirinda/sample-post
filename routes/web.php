@@ -26,6 +26,10 @@ Route::get('/', function () {
 
 Route::middleware("role:all")->group(function () {
     Route::get("home", [HomeController::class, 'home'])->name('home');
+    Route::get('users/{id}', [UserController::class, 'user'])->name('user.view');
+    Route::get('my-profile', [UserController::class, 'profile'])->name('user.profile');
+    Route::put('my-profile', [UserController::class, 'profile_update'])->name('user.profile.update');
+
     Route::prefix("post")->group(function () {
         Route::controller(PostController::class)->group(function () {
             Route::get('create', 'create')->name('post.create');
@@ -75,7 +79,6 @@ Route::middleware("role:admin")->group(function () {
             Route::get('inquiry', 'inquiry')->name('user.inquiry');
             Route::get('create', 'create')->name('user.create');
             Route::post('create', 'store')->name('user.store');
-            Route::get('my-profile', 'profile')->name('user.profile');
             Route::get('edit-list', 'edit_list')->name('user.edit.list');
             Route::get('edit/{id}', 'edit')->name('user.edit')
                 ->where('id', '[0-9]+');

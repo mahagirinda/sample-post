@@ -13,16 +13,41 @@
     height: 250px;
 }
 
-.image-profile-md {
-    max-height: 50px;
-    max-width: 50px;
+.image-profile-md-wrapper {
+    height: 46px;
+    width: 46px;
     object-fit: cover;
-    border-radius: 100%;
+}
+
+.image-profile-md {
+    height: 46px;
+    width: 46px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.image-profile-sm-wrapper {
+    height: 20px;
+    width: 20px;
+    object-fit: cover;
 }
 
 .image-profile-sm {
-    max-height: 20px;
-    max-width: 20px;
+    height: 20px;
+    width: 20px;
     object-fit: cover;
-    border-radius: 100%;
+    border-radius: 50%;
+}
+
+.image-profile-wrapper {
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+}
+
+.image-profile {
+    height: 250px;
+    width: 250px;
+    object-fit: cover;
+    border-radius: 10px;
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,6 +23,18 @@ class UserService
     public function getUserById($id)
     {
         return User::where('id', $id)->first();
+    }
+
+    public function getUserProfileById($id)
+    {
+        if (Auth::user()->id != $id) {
+            return User::where('id', $id)->withCount('comments', 'posts')
+                ->with(['posts' => function ($query) {
+                    $query->where('draft', 1); // 1 : not on draft
+                }])->first();
+        }
+
+        return User::where('id', $id)->withCount('comments', 'posts')->with('posts')->first();
     }
 
     public function save(UserRequest $request): void
@@ -43,8 +56,8 @@ class UserService
     {
         $user = $this->getUserById($request->id);
         $user->name = $request->name;
-        $user->email = $request->email;
-        $user->role = $request->role;
+        $user->email = $request->email ?? $user->email;
+        $user->role = $request->role ?? $user->role;
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             if (Storage::disk('public')->exists('image/user/' . $user->image)) {
                 if ($user->image != 'default.png') {

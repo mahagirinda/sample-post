@@ -55,9 +55,11 @@
                             <div class="text-muted text-xs">
                                 {{ Carbon::parse($post->created_at)->format('d F Y - H:i') }} <br>
                                 <div class="align-content-center d-flex align-items-center my-2">
-                                    <img src="{{ url('storage/image/user/' . $post->user->image) }}"
-                                         class="image-profile-sm mr-10"
-                                         alt="{{ "content-image-" . $post->user->name }}" loading="lazy">
+                                    <div class="image-profile-sm-wrapper mr-10">
+                                        <img src="{{ url('storage/image/user/' . $post->user->image) }}"
+                                             class="image-profile-sm"
+                                             alt="{{ "content-image-" . $post->user->name }}" loading="lazy">
+                                    </div>
                                     {{ $post->user->name }}
                                     @if($post->user->role == 'admin')
                                         &nbsp;<span class="badge bg-info ml-5">Admin</span>

@@ -30,18 +30,19 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => 'required|string|min:3|max:40',
-            'role' => 'required|string'
+            'name' => 'required|string|min:3|max:40'
         ];
 
         if ($this->isMethod('post')) {
             $rules['email'] = 'required|email|unique:users,email';
             $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
+            $rules['role'] = 'required';
             $rules['password'] = 'required|min:8';
             $rules['password_confirmation'] = 'required|same:password';
         } elseif ($this->isMethod('put')) {
-            $rules['email'] = 'sometimes|email';
+            $rules['email'] = 'sometimes|nullable|email|unique:users,email';
             $rules['image'] = 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048';
+            $rules['role'] = 'sometimes|nullable';
             $rules['password'] = 'sometimes|nullable|min:8';
             $rules['password_confirmation'] = 'nullable|same:password';
         }
