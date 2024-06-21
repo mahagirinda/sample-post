@@ -16,11 +16,13 @@ class CommonService
     {
         if (env('APP_ENV') == "local") {
             $errorMessage = "Error : " . $e->getMessage();
+            Log::info($errorMessage);
         } else {
             $errorMessage = "Error Code : " . $e->getCode();
+            $errorMessageLog = "Error : " . $e->getMessage();
+            Log::info($errorMessageLog);
         }
 
-        Log::info($errorMessage);
         return $errorMessage;
     }
 }

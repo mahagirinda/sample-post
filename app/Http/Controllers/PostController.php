@@ -17,6 +17,7 @@ class PostController extends Controller
     private PostService $postService;
     private CategoryService $categoryService;
     private CommonService $commonService;
+    private string $controllerName = '[PostController] ';
 
     public function __construct(CategoryService $categoryService,
                                 PostService $postService, CommonService $commonService)
@@ -52,6 +53,8 @@ class PostController extends Controller
 
     public function store(PostRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("create");
+
         try {
             $this->postService->save($request);
         } catch (Exception $e) {
@@ -59,6 +62,7 @@ class PostController extends Controller
             return redirect()->route('post.create')->with('error', $errorMessage);
         }
 
+        $this->generateEndLogMessage("create", $request);
         return redirect()->route('post.create')->with('success', 'Post saved successfully!');
     }
 
@@ -87,6 +91,8 @@ class PostController extends Controller
 
     public function update(PostRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("update");
+
         try {
             $post = $this->postService->update($request);
         } catch (Exception $e) {
@@ -95,11 +101,14 @@ class PostController extends Controller
         }
 
         $parameter = ['id' => $post->id];
+        $this->generateEndLogMessage("update", $request);
         return redirect()->route('post.edit', $parameter)->with('success', 'Post updated successfully!');
     }
 
     public function user_update(PostRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("update");
+
         try {
             $post = $this->postService->update($request);
             if (Auth::user()->id != $post->user_id) {
@@ -111,6 +120,7 @@ class PostController extends Controller
         }
 
         $parameter = ['id' => $post->id];
+        $this->generateEndLogMessage("update", $request);
         return redirect()->route('post.user.edit', $parameter)->with('success', 'Post updated successfully!');
     }
 
@@ -118,6 +128,19 @@ class PostController extends Controller
     {
         $posts = $this->postService->getAllPost(20);
         return view('post.inquiry', compact('posts'));
+    }
+
+    function generateStartLogMessage(string $method): void
+    {
+        $message = $this->controllerName . Auth::user()->name . " is trying to " . $method . " a post ...";
+        $this->commonService->writeLog($message);
+    }
+
+    function generateEndLogMessage(string $method, PostRequest $request): void
+    {
+        $message = $this->controllerName . Auth::user()->name
+            . " success " .$method. " a post with title : " . $request->title;
+        $this->commonService->writeLog($message);
     }
 
 }

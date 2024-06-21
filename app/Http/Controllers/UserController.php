@@ -15,6 +15,7 @@ class UserController extends Controller
 {
     private UserService $userService;
     private CommonService $commonService;
+    private string $controllerName = '[UserController] ';
 
     public function __construct(UserService $userService, CommonService $commonService)
     {
@@ -42,6 +43,8 @@ class UserController extends Controller
 
     public function profile_update (UserRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("update");
+
         try {
             $this->userService->update($request);
         } catch (Exception $e) {
@@ -49,11 +52,14 @@ class UserController extends Controller
             return redirect()->route('user.profile')->with('error', $errorMessage);
         }
 
+        $this->generateEndLogMessage("update", $request);
         return redirect()->route('user.profile')->with('success', 'User updated successfully!');
     }
 
     function store(UserRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("create");
+
         try {
             $this->userService->save($request);
         } catch (Exception $e) {
@@ -61,6 +67,7 @@ class UserController extends Controller
             return redirect()->route('user.create')->with('error', $errorMessage);
         }
 
+        $this->generateEndLogMessage("create", $request);
         return redirect()->route('user.create')->with('success', 'User created successfully!');
     }
 
@@ -81,6 +88,8 @@ class UserController extends Controller
 
     public function update(UserRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("update");
+
         try {
             $user = $this->userService->update($request);
         } catch (Exception $e) {
@@ -89,6 +98,7 @@ class UserController extends Controller
         }
 
         $parameter = ['id' => $user->id];
+        $this->generateEndLogMessage("update", $request);
         return redirect()->route('user.edit', $parameter)->with('success', 'User updated successfully!');
     }
 
@@ -96,5 +106,18 @@ class UserController extends Controller
     {
         $users = $this->userService->getUsers(20);
         return view('user.inquiry', compact('users'));
+    }
+
+    function generateStartLogMessage(string $method): void
+    {
+        $message = $this->controllerName . Auth::user()->name . " is trying to " . $method . " an user ...";
+        $this->commonService->writeLog($message);
+    }
+
+    function generateEndLogMessage(string $method, UserRequest $request): void
+    {
+        $message = $this->controllerName . Auth::user()->name
+            . " success " .$method. " an user with data : \n" . json_encode($request->all());
+        $this->commonService->writeLog($message);
     }
 }

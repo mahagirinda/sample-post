@@ -15,6 +15,7 @@ class CommentController extends Controller
 {
     private CommentService $commentService;
     private CommonService $commonService;
+    private string $controllerName = '[CommentController] ';
 
     public function __construct(CommentService $commentService, CommonService $commonService)
     {
@@ -24,6 +25,8 @@ class CommentController extends Controller
 
     public function store(CommentRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("create");
+
         try {
             $this->commentService->save($request);
         } catch (Exception $e) {
@@ -31,6 +34,7 @@ class CommentController extends Controller
             return redirect()->back()->with('error', $errorMessage);
         }
 
+        $this->generateEndLogMessage("create", $request);
         return redirect()->back()->with('success', 'Comment saved successfully!');
     }
 
@@ -64,6 +68,8 @@ class CommentController extends Controller
 
     public function update(CommentRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("update");
+
         try {
             $comment = $this->commentService->update($request);
         } catch (Exception $e) {
@@ -72,11 +78,14 @@ class CommentController extends Controller
         }
 
         $parameter = ['id' => $comment->id];
+        $this->generateEndLogMessage("update", $request);
         return redirect()->route('comment.edit', $parameter)->with('success', 'Comment updated successfully!');
     }
 
     public function user_update(CommentRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("update");
+
         try {
             $comment = $this->commentService->update($request);
             if (Auth::user()->id != $comment->user_id) {
@@ -88,6 +97,7 @@ class CommentController extends Controller
         }
 
         $parameter = ['id' => $comment->id];
+        $this->generateEndLogMessage("update", $request);
         return redirect()->route('comment.user.edit', $parameter)->with('success', 'Comment updated successfully!');
     }
 
@@ -95,5 +105,18 @@ class CommentController extends Controller
     {
         $comments = $this->commentService->getComments(20);
         return view('comments.inquiry', compact('comments'));
+    }
+
+    function generateStartLogMessage(string $method): void
+    {
+        $message = $this->controllerName . Auth::user()->name . " is trying to " . $method . " a comment ...";
+        $this->commonService->writeLog($message);
+    }
+
+    function generateEndLogMessage(string $method, CommentRequest $request): void
+    {
+        $message = $this->controllerName . Auth::user()->name
+            . " success " .$method. " a comment with comment : " . $request->comment;
+        $this->commonService->writeLog($message);
     }
 }

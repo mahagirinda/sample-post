@@ -8,12 +8,14 @@ use App\Services\CommonService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
     private CategoryService $categoryService;
     private CommonService $commonService;
+    private string $controllerName = '[CategoryController] ';
 
     public function __construct(CategoryService $categoryService, CommonService $commonService)
     {
@@ -34,6 +36,8 @@ class CategoryController extends Controller
 
     function store(CategoryRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("create");
+
         try {
             $this->categoryService->save($request);
         } catch (Exception $e) {
@@ -41,6 +45,7 @@ class CategoryController extends Controller
             return redirect()->route('category.create')->with('error', $errorMessage);
         }
 
+        $this->generateEndLogMessage("create", $request);
         return redirect()->route('category.create')->with('success', 'Category saved successfully!');
     }
 
@@ -58,6 +63,8 @@ class CategoryController extends Controller
 
     public function update(CategoryRequest $request): RedirectResponse
     {
+        $this->generateStartLogMessage("update");
+
         try {
             $category = $this->categoryService->update($request);
         } catch (Exception $e) {
@@ -66,6 +73,7 @@ class CategoryController extends Controller
         }
 
         $parameter = ['id' => $category->id];
+        $this->generateEndLogMessage("update", $request);
         return redirect()->route('category.edit', $parameter)->with('success', 'Category updated successfully!');
     }
 
@@ -73,5 +81,18 @@ class CategoryController extends Controller
     {
         $categories = $this->categoryService->getCategoryWithPage(20);
         return view('category.inquiry', compact('categories'));
+    }
+
+    function generateStartLogMessage(string $method): void
+    {
+        $message = $this->controllerName . Auth::user()->name . " is trying to " . $method . " a category ...";
+        $this->commonService->writeLog($message);
+    }
+
+    function generateEndLogMessage(string $method, CategoryRequest $request): void
+    {
+        $message = $this->controllerName . Auth::user()->name
+            . " success " .$method. " a category with data : \n" . json_encode($request->all());
+        $this->commonService->writeLog($message);
     }
 }
