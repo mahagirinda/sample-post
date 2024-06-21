@@ -23,6 +23,17 @@
 @endsection
 
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </ul>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-body p-4">
             <div class="row">
