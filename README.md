@@ -1,66 +1,106 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Simple Post
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Author
 
-## About Laravel
+**Putu Maha Girinda Praba**\
+Politeknik Negeri Bali
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+[![portfolio](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://mahagirinda.github.io)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/mahagirinda/)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Pembuka
 
-## Learning Laravel
+Aplikasi ini adalah web berbasis **Framework Laravel** dengan platform blogging sederhana yang memungkinkan pengguna untuk membuat postingan, berkomentar pada postingan, dan berinteraksi dengan pengguna lain. 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Aplikasi ini memiliki panel admin terpisah untuk mengelola pengguna, postingan, komentar, dan kategori.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Fitur
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**User** :
 
-## Laravel Sponsors
+- Membuat dan mengedit profil
+- Membuat, mengedit, dan melihat postingan
+- Berkomentar pada postingan
+- Melihat postingan berdasarkan kategori
+- Melihat profil dan postingan pengguna lain
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Admin** :
 
-### Premium Partners
+- Manajemen pengguna *(membuat, mengedit, melihat)*
+- Manajemen postingan *(membuat, mengedit, melihat)*
+- Manajemen komentar *(membuat, mengedit, melihat)*
+- Manajemen kategori *(membuat, mengedit, melihat)*
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Requirement
 
-## Contributing
+- PHP >= 8.1
+- Composer
+- MySQL or MariaDB
+- Apache or Nginx
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Langkah Instalasi
 
-## Code of Conduct
+**1. Clone dari repository local:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   ```bash
+   git clone <repository-url>
+   cd <project-directory>
+   ```
 
-## Security Vulnerabilities
+**2. Instal dependensi:**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```bash
+   composer install
+   ```
 
-## License
+**3. Atur variabel env:**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   ```bash
+   cp .env.example .env
+   ```
+   * anda dapat membuat manual file `.env` pada root directory
+   * sesuaikan isi `.env` sesuai `host, usernama, password database` yang adan pakai
+
+**4. Buat key aplikasi :**
+
+   ```bash
+   php artisan key:generate
+   ```
+
+**5. Jalankan migrasi dan seed basis data :**
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+## Struktur Aplikasi
+- `Database Design` : [klik link untuk melihat diagram](https://drawsql.app/teams/pos-app-apis/diagrams/simple-post)
+- `Controllers`: Berisi logika untuk menangani permintaan dan mengembalikan respons.
+- `Models`: Mewakili tabel basis data dan menyediakan cara untuk berinteraksi dengan data.
+- `Views`: Berisi template HTML untuk merender antarmuka pengguna.
+- `Routes`: Mendefinisikan URL aplikasi dan memetakannya ke pengontrol dan tindakan.
+
+## Route List
+
+Rute Publik:
+- `/home:` Menampilkan halaman beranda.
+- `/users/{id}`: Menampilkan profil pengguna.
+- `/my-profile`: Menampilkan profil pengguna yang sedang login.
+- `/post/create:` Menampilkan formulir pembuatan postingan.
+- `/post/view/{id}`: Menampilkan postingan.
+- `/comment/create`: Membuat komentar.
+
+Rute Admin:
+- `/dashboard`: Menampilkan dasbor admin.
+- `/post/inquiry`: Menampilkan formulir pertanyaan postingan.
+- `/post/edit/{id}`: Menampilkan formulir pengeditan postingan.
+- `/comment/inquiry`: Menampilkan formulir pertanyaan komentar.
+- `/comment/edit/{id}`: Menampilkan formulir pengeditan komentar.
+- `/user/inquiry`: Menampilkan formulir pertanyaan pengguna.
+- `/user/create`: Menampilkan formulir pembuatan pengguna.
+- `/user/edit/{id}`: Menampilkan formulir pengeditan pengguna.
+- `/category/inquiry`: Menampilkan formulir pertanyaan kategori.
+- `/category/create`: Menampilkan formulir pembuatan kategori.
+- `/category/edit/{id}`: Menampilkan formulir pengeditan kategori.
+   
