@@ -73,7 +73,7 @@ class CommentController extends Controller
      * @param string $id The ID of the comment to edit.
      * @return View The view displaying the form to edit the comment details.
      */
-    function edit($id): View
+    function edit(string $id): View
     {
         $comment = $this->commentService->getCommentById($id);
         return view('comments.edit', compact('comment'));
@@ -90,7 +90,7 @@ class CommentController extends Controller
      * @param string $id The ID of the comment to edit.
      * @return View|RedirectResponse The view displaying the form to edit the comment details or a redirect response if the user is not the owner.
      */
-    function user_edit($id): View | RedirectResponse
+    function user_edit(string $id): View | RedirectResponse
     {
         $comment = $this->commentService->getCommentById($id);
         if (Auth::user()->id != $comment->user_id) {

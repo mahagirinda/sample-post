@@ -84,7 +84,7 @@ class CategoryController extends Controller
      * @param string $id The ID of the category to edit.
      * @return View The view displaying the form to edit the category details.
      */
-    function edit($id): View
+    function edit(string $id): View
     {
         $category = $this->categoryService->getCategoryById($id);
         return view('category.edit', compact('category'));

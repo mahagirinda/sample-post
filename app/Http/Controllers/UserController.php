@@ -39,7 +39,7 @@ class UserController extends Controller
      * @param string $id The ID of the user whose profile is to be displayed.
      * @return View The view displaying the profile of the specified user.
      */
-    function user($id): View
+    function user(string $id): View
     {
         $user = $this->userService->getUserProfileById($id);
         return view('user.view', compact('user'));
@@ -116,7 +116,7 @@ class UserController extends Controller
      * @param string $id The ID of the user to be edited.
      * @return View|RedirectResponse The view displaying the edit form or a redirect response if the user tries to edit themselves.
      */
-    function edit($id): View | RedirectResponse
+    function edit(string $id): View | RedirectResponse
     {
         $user = $this->userService->getUserById($id);
         if (Auth::user()->id == $user->id) {
@@ -184,7 +184,8 @@ class UserController extends Controller
     function generateEndLogMessage(string $method, UserRequest $request): void
     {
         $message = $this->controllerName . Auth::user()->name
-            . " success " .$method. " an user with data : \n" . json_encode($request->all());
+            . " success " .$method. " an user with data : \n" . json_encode($request
+                ->except('password', 'password_confirmation'));
         $this->commonService->writeLog($message);
     }
 }

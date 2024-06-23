@@ -109,7 +109,7 @@ class PostController extends Controller
      * @param string $id The ID of the post to be edited.
      * @return View The view displaying the form to edit the specified post.
      */
-    function edit($id): View
+    function edit(string $id): View
     {
         $post = $this->postService->getPostById($id);
         $categories = $this->categoryService->getActiveCategories();
@@ -122,7 +122,7 @@ class PostController extends Controller
      * @param string $id The ID of the post to be edited.
      * @return View|RedirectResponse The view displaying the form to edit the post or a redirect response with an error message.
      */
-    function user_edit($id): View|RedirectResponse
+    function user_edit(string $id): View|RedirectResponse
     {
         $post = $this->postService->getPostById($id);
         $categories = $this->categoryService->getActiveCategories();
