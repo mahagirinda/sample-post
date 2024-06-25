@@ -12,6 +12,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static where(string $string, string $id)
  * @method static paginate(int $int)
  * @method static count()
+ * @method static find(string $user_id)
  * @property mixed $name
  * @property mixed $email
  * @property mixed|string $image
