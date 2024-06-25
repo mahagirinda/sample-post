@@ -28,7 +28,7 @@ class PostController extends Controller
     function get_all_posts(Request $request): AnonymousResourceCollection
     {
         $perPage = $request->input('per_page', 10);
-        $posts = $this->postService->getAllPost($perPage, 'desc');
+        $posts = $this->postService->getAllActivePostWithPaginate($perPage, 'desc');
 
         return PostListResource::collection($posts);
     }

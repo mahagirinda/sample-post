@@ -24,6 +24,13 @@ class PostService
         return Post::where('id', $id)->firstOrFail();
     }
 
+    public function getAllActivePostWithPaginate($per_page, $direction = 'asc')
+    {
+        return Post::where('draft', 0)->whereHas('category', function ($query) {
+            $query->where('status', 1);
+        })->orderBy('created_at', $direction)->paginate($per_page);
+    }
+
     public function getActivePostByWithLimit($limit)
     {
         return Post::where('draft', 0)->whereHas('category', function ($query) {
