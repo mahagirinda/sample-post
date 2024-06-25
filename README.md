@@ -15,6 +15,9 @@ Aplikasi ini adalah web berbasis **Framework Laravel** dengan platform blogging 
 
 Aplikasi ini memiliki panel admin terpisah untuk mengelola pengguna, postingan, komentar, dan kategori.
 
+Versi mobile menggunaan Flutter dengan API :\
+[https://github.com/mahagirinda/sample-post-flutter](https://github.com/mahagirinda/sample-post-flutter)
+
 ## Fitur
 
 **User** :
@@ -68,7 +71,13 @@ Aplikasi ini memiliki panel admin terpisah untuk mengelola pengguna, postingan, 
    php artisan key:generate
    ```
 
-**5. Jalankan migrasi dan seed basis data :**
+**5. Jalankan link storage public :**
+
+   ```bash
+   php artisan storage:link
+   ```
+
+**6. Jalankan migrasi dan seed basis data :**
 
    ```bash
    php artisan migrate --seed
@@ -81,9 +90,11 @@ Aplikasi ini memiliki panel admin terpisah untuk mengelola pengguna, postingan, 
 - `Views`: Berisi template HTML untuk merender antarmuka pengguna.
 - `Routes`: Mendefinisikan URL aplikasi dan memetakannya ke pengontrol dan tindakan.
 
-## Route List
+## Web Route List
 
 Rute Publik:
+- `/login:` Menampilkan Login.
+- `/register:` Menampilkan Register.
 - `/home:` Menampilkan halaman beranda.
 - `/users/{id}`: Menampilkan profil pengguna.
 - `/my-profile`: Menampilkan profil pengguna yang sedang login.
@@ -93,14 +104,20 @@ Rute Publik:
 
 Rute Admin:
 - `/dashboard`: Menampilkan dasbor admin.
-- `/post/inquiry`: Menampilkan formulir pertanyaan postingan.
+- `/post/inquiry`: Menampilkan list data postingan.
 - `/post/edit/{id}`: Menampilkan formulir pengeditan postingan.
-- `/comment/inquiry`: Menampilkan formulir pertanyaan komentar.
+- `/comment/inquiry`: Menampilkan list data komentar.
 - `/comment/edit/{id}`: Menampilkan formulir pengeditan komentar.
 - `/user/inquiry`: Menampilkan formulir pertanyaan pengguna.
 - `/user/create`: Menampilkan formulir pembuatan pengguna.
 - `/user/edit/{id}`: Menampilkan formulir pengeditan pengguna.
-- `/category/inquiry`: Menampilkan formulir pertanyaan kategori.
+- `/category/inquiry`: Menampilkan list data kategori.
 - `/category/create`: Menampilkan formulir pembuatan kategori.
 - `/category/edit/{id}`: Menampilkan formulir pengeditan kategori.
    
+## API Route List
+- `/posts`: Menampilkan list data Postingan yang diupload user.\
+Parameter `per_page` : untuk menampilkan jumlah data per halaman
+- `/posts/{id}`: Menampilkan postingan berdasarkan id.\
+Parameter `id` : ID Postingan
+
