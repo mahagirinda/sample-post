@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Storage;
 
 class PostService
 {
-    public function getAllPost($per_page)
+    public function getAllPost($per_page, $direction = 'asc')
     {
-        return Post::paginate($per_page);
+        return Post::orderBy('created_at', $direction)->paginate($per_page);
     }
 
     public function countPost(): int
