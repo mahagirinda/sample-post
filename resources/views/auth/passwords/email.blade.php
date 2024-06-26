@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="shortcut icon" href="{{ url("images/icon.png") }}" type="image/x-icon"/>
-    <title>{{ env('APP_NAME') }} - Reset Password</title>
+    <title>{{ config('app.name') }} - Reset Password</title>
 
     <link rel="stylesheet" href="{{ url("css/bootstrap.min.css") }}"/>
     <link rel="stylesheet" href="{{ url("css/lineicons.css") }}" type="text/css"/>

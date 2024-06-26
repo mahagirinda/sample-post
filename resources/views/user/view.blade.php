@@ -74,7 +74,7 @@
                                         @if($post->created_at != $post->updated_at)
                                             &nbsp;<span class="badge bg-secondary">Edited</span>
                                         @endif
-                                        @if($post->created_at != $post->updated_at)
+                                        @if($post->draft)
                                             &nbsp;<span class="ml-2 badge bg-warning">On Draft</span>
                                         @endif
                                     </h5>
