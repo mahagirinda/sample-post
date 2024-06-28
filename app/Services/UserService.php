@@ -30,7 +30,7 @@ class UserService
         if (Auth::user()->id != $id) {
             return User::where('id', $id)->withCount('comments', 'posts')
                 ->with(['posts' => function ($query) {
-                    $query->where('draft', 1); // 1 : not on draft
+                    $query->where('draft', 0); // 0 : not on draft
                 }])->first();
         }
 

@@ -58,7 +58,7 @@
                 @if ($user->posts->isEmpty())
                     <div class="col-md-12">
                         <div class="card p-5 text-center">
-                            {{ Auth::user()->name }} has no post yet
+                            {{ $user->name }} has no post yet
                         </div>
                     </div>
                 @else
