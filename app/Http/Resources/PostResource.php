@@ -32,7 +32,7 @@ class PostResource extends JsonResource
         return [
             'title' => $this->title,
             'author' => User::find($this->user_id)->name,
-            'image' => env('APP_URL'). "/storage/image/post/" . $this->image,
+            'image' => config('app.url') . "/storage/image/post/" . $this->image,
             'category' => Category::find($this->category_id)->name,
             'contents' => $this->contents,
             'comments' => CommentsResource::collection($this->comments),
